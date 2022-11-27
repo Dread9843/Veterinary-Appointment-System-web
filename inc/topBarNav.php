@@ -20,14 +20,14 @@
           padding: 0.3em 2.5em !important;
         }
         #top-Nav{
-          top: 2.3em;
+          /* top: 2.3em; */
         }
         .text-sm .layout-navbar-fixed .wrapper .main-header ~ .content-wrapper, .layout-navbar-fixed .wrapper .main-header.text-sm ~ .content-wrapper {
           margin-top: calc(3.6) !important;
           padding-top: calc(3.2em) !important
       }
       </style>
-      <nav class="w-100 px-2 py-1 position-fixed top-0 bg-light text-dark" id="login-nav">
+      <!-- <nav class="w-100 px-2 py-1 position-fixed top-0 bg-light text-dark" id="login-nav">
         <div class="d-flex justify-content-between w-100">
           <div>
             <span class="mr-2"><i class="fa fa-phone mr-1"></i> <?= $_settings->info('contact') ?></span>
@@ -46,7 +46,7 @@
             <?php endif; ?>
           </div>
         </div>
-      </nav>
+      </nav> -->
       <nav class="main-header navbar navbar-expand navbar-dark border-0 text-sm bg-gradient-dark" id='top-Nav'>
         
         <div class="container">
@@ -80,6 +80,10 @@
               <?php if($_settings->userdata('id') > 0 && $_settings->userdata('login_type' != 1)): ?>
               <li class="nav-item">
                 <a href="./?page=profile" class="nav-link <?= isset($page) && $page =='profile' ? "active" : "" ?>">Profile</a>
+              </li>
+              <?php else: ?>
+                <li class="nav-item">
+              <a href="./admin" class="nav-link">Admin Login</a>
               </li>
               <?php endif; ?>
               <!-- <li class="nav-item">
