@@ -1,4 +1,7 @@
 <?php require_once('../config.php') ?>
+<?php
+require_once 'dashboard/sess_auth.php';
+?>
 <!DOCTYPE html>
 <html lang="en" class="" style="height: auto;">
  <?php require_once('dashboard/header.php') ?>
@@ -34,24 +37,20 @@
       max-width:unset !important
     }
   </style>
+  
   <div class="h-100 d-flex align-items-center w-100" id="login">
-    <div class="col-7 h-100 d-flex align-items-center justify-content-center">
-      <div class="w-100">
-        <center><img src="<?= validate_image($_settings->info('logo')) ?>" alt="" id="logo-img"></center>
-        <h1 class="text-center py-5 login-title"><b><?php echo $_settings->info('name') ?> - Admin</b></h1>
-      </div>
-      
+    <div class="col-3 h-50 d-flex align-items-center justify-content-center">
     </div>
     <div class="col-5 h-100 bg-gradient">
       <div class="d-flex w-100 h-100 justify-content-center align-items-center">
-        <div class="card col-sm-12 col-md-6 col-lg-3 card-outline card-primary rounded-0 shadow">
+        <div class="card col-sm-12 col-md-6 col-lg-3 card-outline rounded-2 shadow border border-success">
           <div class="card-header rounded-0">
             <h4 class="text-purle text-center"><b>Login</b></h4>
           </div>
           <div class="card-body rounded-0">
             <form id="login-frm" action="" method="post">
               <div class="input-group mb-3">
-                <input type="text" class="form-control" autofocus name="username" placeholder="Username">
+                <input type="text" class="form-control" autofocus name="username" placeholder="Email Address" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-user"></span>
@@ -59,30 +58,27 @@
                 </div>
               </div>
               <div class="input-group mb-3">
-                <input type="password" class="form-control" name="password" placeholder="Password">
+                <input type="password" class="form-control" name="password" placeholder="Password" autofocus required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-lock"></span>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-8">
-                  <a href="<?php echo base_url ?>">Go to Website</a>
-                </div>
-                <!-- /.col -->
-                <div class="col-4">
-                  <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-                </div>
-                <!-- /.col -->
+              <div class="text-center">
+              <button type="submit" class="btn btn-sm btn-success ">Sign In</button>
               </div>
+              <div class="text-center">
+                <p>Don't have account ? <a href="./registration.php"> Sign Up Here</a></p>
+                <a href="<?php echo base_url ?>">Go to Website</a>
+              </div>
+              
             </form>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->

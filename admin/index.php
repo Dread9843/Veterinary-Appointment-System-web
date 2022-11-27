@@ -1,4 +1,7 @@
 <?php require_once('../config.php'); ?>
+<?php
+require_once 'dashboard/sess_auth.php';
+?>
  <!DOCTYPE html>
 <html lang="en" class="" style="height: auto;">
 <?php require_once('dashboard/header.php') ?>
@@ -8,7 +11,7 @@
      <?php require_once('dashboard/navigation.php') ?>
      <?php if($_settings->chk_flashdata('success')): ?>
       <script>
-        alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
+        alert_toast("<?php echo $_settings->flashdata('success') ?>",'success');
       </script>
       <?php endif;?>    
      <?php $page = isset($_GET['page']) ? $_GET['page'] : 'home';  ?>

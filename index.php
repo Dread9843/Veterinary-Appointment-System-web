@@ -6,7 +6,7 @@
     height:70vh;
     width:calc(100%);
     position:relative;
-    top:-1em;
+    top:-3em;
   }
   #header:before{
     content:"";

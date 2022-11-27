@@ -19,9 +19,9 @@
           z-index: 1037;
           padding: 0.3em 2.5em !important;
         }
-        #top-Nav{
-          /* top: 2.3em; */
-        }
+        /* #top-Nav{
+          top: 2.3em; 
+        }*/
         .text-sm .layout-navbar-fixed .wrapper .main-header ~ .content-wrapper, .layout-navbar-fixed .wrapper .main-header.text-sm ~ .content-wrapper {
           margin-top: calc(3.6) !important;
           padding-top: calc(3.2em) !important
@@ -83,7 +83,10 @@
               </li>
               <?php else: ?>
                 <li class="nav-item">
-              <a href="./admin" class="nav-link">Admin Login</a>
+              <a href="./admin" class="nav-link">Login</a>
+              </li>
+              <li class="nav-item">
+              <a href="./admin/registration.php" class="nav-link">Sign Up</a>
               </li>
               <?php endif; ?>
               <!-- <li class="nav-item">
