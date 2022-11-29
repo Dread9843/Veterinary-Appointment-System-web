@@ -86,7 +86,7 @@
               <a href="./admin" class="nav-link">Login</a>
               </li>
               <li class="nav-item">
-              <a href="./admin/registration.php" class="nav-link">Sign Up</a>
+              <a href="./?page=admin/registration" class="nav-link">Sign Up</a>
               </li>
               <?php endif; ?>
               <!-- <li class="nav-item">

@@ -8,7 +8,7 @@ $cid = isset($_GET['cids']) ? $_GET['cids'] : 'all';
         <div class="row">
             <div class="col-md-4">
                 <h3>Categories</h3>
-                <div class="list-group">
+                <div class="list-group border border-success">
                     <div class="list-group-item list-group-item-action">
                         <div class="custom-control custom-checkbox">
                           <input class="custom-control-input" type="checkbox" id="category_all" value="all" <?= $cid =='all' ? "checked" :"" ?>>
@@ -29,7 +29,7 @@ $cid = isset($_GET['cids']) ? $_GET['cids'] : 'all';
                 </div>
             </div>
             <div class="col-md-8">
-            <div class="list-group" id="service-list">
+            <div class="list-group border border-success" id="service-list">
             <?php 
                 $categories = $conn->query("SELECT * FROM `category_list`");
                 $cat_arr = array_column($categories->fetch_all(MYSQLI_ASSOC),'name','id');
