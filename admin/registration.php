@@ -29,6 +29,11 @@
       max-width:unset !important
     }
   </style>
+  <?php if($_settings->chk_flashdata('success')): ?>
+<script>
+	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success');
+</script>
+<?php endif;?>
   <div class="h-100 d-flex align-items-center w-100" id="register">
     <div class="col-5 h-100 bg-gradient">
       <div class="d-flex w-100 h-100 justify-content-center align-items-center">
@@ -37,7 +42,9 @@
             <h5 class="text-purle text-center"><b>Registration</b></h5>
           </div>
           <div class="card-body rounded-0">
-          <form id="register_frm" action="" method="post">
+          <div id="msg"></div>
+          <form id="register_frm" action="">
+          <input type="hidden" name="id">
             <div class="form-group">
                 <label>Full Name</label>
                 <input type="text" class="form-control" name="fullname" id="fullname"  placeholder="Full Name" required autofocus>
@@ -70,57 +77,34 @@
 
   <script>
 // Create
-$(document).ready(function () {
-    $("#adduser").click(function (e) {
-        e.preventDefault();
-        debugger;
-        if ($('#register_frm').valid()) {
-           var dataString = $("#register_frm").serialize();
-          //  console.log(dataString);
-          debugger;
-           $.ajax({
-               type: "POST",
-               url: _base_url_+'classes/Customer.php/index',
-               data: dataString,
-               success: function (data) {
-                // debugger;
-                //   console.log(data);
-                // alert($data);
-              }
-          });
-       }
-   });
+$(function(){
+  $('#register_frm').submit(function(e){
+    e.preventDefault();
+    var _this = $(this)
+    start_loader();
+    $.ajax({
+      url:_base_url_+"classes/Customer.php?f=create_user",
+			data: new FormData($(this)[0]),
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'POST',
+      type: 'POST',
+			success:function(resp){
+				if(resp ==1){
+					location.reload();
+				}else{
+					$('#msg').html('<div class="alert alert-danger">Email already exist! Try new one.</div>')
+					$("html, body").animate({ scrollTop: 0 }, "fast");
+				}
+        end_loader()
+			}
+    })
+  })
 });
 
+</script>
 
-</script>
-<!-- 
-<script>
-  $('#register_frm').submit(function(e){
-		e.preventDefault();
-		var _this = $(this)
-		
-		$.ajax({
-			url:_base_url_+'classes/Customer.php?f=save',
-			data: new FormData($(this)[0]),
-		    cache: false,
-		    contentType: false,
-		    processData: false,
-		    method: 'POST',
-		    type: 'POST',
-			success:function(data){
-				// if(resp ==1){
-				// 	location.href = './?page=user/list';
-				// }else{
-				// 	$('#msg').html('<div class="alert alert-danger">Username already exist</div>')
-				// 	$("html, body").animate({ scrollTop: 0 }, "fast");
-				// }
-        console.log(data);
-    
-			}
-		})
-	}) -->
-</script>
 
 </body>
 </html>

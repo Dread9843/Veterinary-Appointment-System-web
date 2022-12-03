@@ -256,6 +256,43 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+
+	//register users
+	function create_user()
+	{
+		extract($_POST);
+		$postdata = array();
+		$postdata['fullname'] = $_POST['fullname'];
+		$postdata['address'] = $_POST['address'];
+		$postdata['phone'] = $_POST['phone'];
+		$postdata['email'] = $_POST['email'];
+		$password = $_POST['password'];  
+		$postdata['password'] = password_hash($password, PASSWORD_DEFAULT);
+		$postdata['type'] = '3';
+
+		$count_email =  $this->conn->query("SELECT * from users where email = '{$_POST['email']}'")->num_rows;
+		if($count_email > 0){
+			$this->settings->set_flashdata('error','Email Already Exits.');
+			$resp['status'] = 3;
+		}
+		else
+		{
+			$qry = $this->conn->query("INSERT INTO users (fullname,address,phone,email,password,type) values ('{$postdata['fullname']}','{$postdata['address']}','{$postdata['phone']}','{$postdata['email']}','{$postdata['password']}','{$postdata['type']}')");
+
+			if($qry){
+				$id = $this->conn->insert_id;
+				$this->settings->set_flashdata('success','User Details successfully saved.');
+				$resp['status'] = 1;
+			}else{
+				$resp['status'] = 2;
+			}
+		}
+
+		if(isset($resp['msg']))
+		$this->settings->set_flashdata('success',$resp['msg']);
+		return  $resp['status'];
+		
+	}
 }
 
 $Master = new Master();
@@ -288,6 +325,9 @@ switch ($action) {
 	break;
 	case 'delete_service':
 		echo $Master->delete_service();
+	break;
+	case 'create_user':
+		echo $Master->create_user();
 	break;
 	default:
 		// echo $sysset->index();
