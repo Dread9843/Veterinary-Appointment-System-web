@@ -1,5 +1,5 @@
 /*
-SQLyog Professional v13.1.1 (64 bit)
+SQLyog Ultimate v13.1.1 (64 bit)
 MySQL - 10.4.24-MariaDB : Database - vetcare_db
 *********************************************************************
 */
@@ -33,15 +33,22 @@ CREATE TABLE `appointment_list` (
   `age` varchar(50) NOT NULL,
   `service_ids` varchar(100) DEFAULT NULL,
   `status` tinyint(4) NOT NULL DEFAULT 0,
-  `time` varchar(200) DEFAULT NULL,
+  `timeslot` varchar(200) DEFAULT NULL,
   `date_created` datetime NOT NULL DEFAULT current_timestamp(),
   `date_updated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `appointment_list_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category_list` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `appointment_list` */
+
+insert  into `appointment_list`(`id`,`cus_id`,`code`,`schedule`,`owner_name`,`email`,`address`,`category_id`,`breed`,`age`,`service_ids`,`status`,`timeslot`,`date_created`,`date_updated`) values 
+(1,15,'VETCARE-2023010001','2023-01-04','sahil maharjan','anjalishrestha172@gmail.com','aa',7,'','1','5',0,'12:00-13:00','2023-01-04 17:44:22',NULL),
+(2,15,'VETCARE-2023010002','2023-01-04','anjali','herohancy2sahil@gmail.com','aa',11,'','2','4',0,'12:00-13:00','2023-01-04 17:46:17',NULL),
+(3,15,'VETCARE-2023010001','2023-01-04','sahil maharjan','anjalishrestha172@gmail.com','aa',7,'','1','5',0,'12:00-13:00','2023-01-04 17:44:22',NULL),
+(4,15,'VETCARE-2023010002','2023-01-04','anjali','herohancy2sahil@gmail.com','aa',11,'','2','4',0,'12:00-13:00','2023-01-04 17:46:17',NULL),
+(5,15,'VETCARE-2023010001','2023-01-04','sahil maharjan','anjalishrestha172@gmail.com','aa',7,'','1','5',0,'12:00-13:00','2023-01-04 17:44:22',NULL);
 
 /*Table structure for table `category_list` */
 
@@ -92,7 +99,7 @@ CREATE TABLE `message_list` (
 /*Data for the table `message_list` */
 
 insert  into `message_list`(`id`,`fullname`,`contact`,`email`,`message`,`status`,`date_created`) values 
-(1,'Anjali Shrestha','9840167003ss','mhrsahil16@gmail.com','aasdf',0,'2022-12-24 20:25:21'),
+(1,'Anjali Shrestha','9840167003ss','mhrsahil16@gmail.com','aasdf',1,'2022-12-24 20:25:21'),
 (2,'Anjali Shrestha','9840167003','anjalishrestha172@gmail.com','Hello sir',1,'2022-12-24 20:27:54');
 
 /*Table structure for table `service_list` */
@@ -147,7 +154,10 @@ insert  into `system_info`(`id`,`meta_field`,`meta_value`) values
 (20,'address','Teku, Kathmandu'),
 (23,'max_appointment','30'),
 (24,'clinic_schedule','9:00 AM - 5:00 PM'),
-(0,'max_patient','10');
+(0,'max_patient','6'),
+(0,'interval','60'),
+(0,'start_time','09:00'),
+(0,'end_time','15:00');
 
 /*Table structure for table `users` */
 
@@ -169,15 +179,16 @@ CREATE TABLE `users` (
   `date_added` datetime NOT NULL DEFAULT current_timestamp(),
   `date_updated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`fullname`,`phone`,`email`,`password`,`address`,`avatar`,`last_login`,`type`,`status`,`user_status`,`otp`,`date_added`,`date_updated`) values 
 (13,'Sahil Maharjan','9840167003','mhrsahil16@gmail.com','$2y$10$NkAKeQHqSuJd9xuzorRaP.dfp4i8ojM2h7a03r.FOotFSaFmo9NVS','Teku',NULL,NULL,1,1,'verified',NULL,'2022-12-11 17:56:34',NULL),
-(15,'Anjali Shrestha','9861962215','anjalishrestha172@gmail.com','$2y$10$IoOwgGqYKUXh7LsWY.DcMu2EfMd8CXItYCRGoV/n8/rgL6gFi4O9y','Thankot',NULL,NULL,3,1,'verified','296559','2022-12-11 18:35:52','2022-12-11 18:36:46'),
+(15,'Rakesh Shrestha','9861962215','anjalishrestha172@gmail.com','$2y$10$IoOwgGqYKUXh7LsWY.DcMu2EfMd8CXItYCRGoV/n8/rgL6gFi4O9y','Thankot',NULL,NULL,3,1,'verified','296559','2022-12-11 18:35:52','2023-01-05 11:16:48'),
 (17,'Prayushma Maharjan','9810336812','stha.alniza@gmail.com','$2y$10$f3gC1eCr0rJVGndNGpUJsukM3wdXzaYhhROZqknN787xgNUShioU6','Teku',NULL,NULL,2,1,'verified',NULL,'2022-12-15 19:03:06',NULL),
-(18,'Nikesh Shrestha','9860803083','sthanikesh08@gmail.com','$2y$10$rk30vCmQ03Hh1jacnQe40OL40E/Ps00hUEDHaBcDlqfOcOs1aEPTq','Thankot',NULL,NULL,3,1,'verified','747057','2022-12-16 18:27:03','2022-12-16 18:28:31');
+(18,'Nikesh Shrestha','9860803083','sthanikesh08@gmail.com','$2y$10$rk30vCmQ03Hh1jacnQe40OL40E/Ps00hUEDHaBcDlqfOcOs1aEPTq','Thankot',NULL,NULL,3,1,'verified','747057','2022-12-16 18:27:03','2022-12-16 18:28:31'),
+(19,'nikesh shrestha','9861962215','seemoreclan3@gmail.com','$2y$10$yZZIb6GNvhwvzfdu8TkxsuMsEc8mziUu3I1ZYewsJyRlNd9Ds3.r6','Kathmandu',NULL,NULL,3,1,'verified','737842','2023-01-02 15:15:57','2023-01-02 15:16:32');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

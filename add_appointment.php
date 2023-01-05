@@ -31,15 +31,11 @@ $schedule = $_GET['schedule'];
     $start_time = $_SESSION['system_info']['start_time'];
     $end_time = $_SESSION['system_info']['end_time'];
     $interval = $_SESSION['system_info']['interval'];
-    // $start_time = '21:00';
-// $end_time = '02:00';
-
+ 
 	$start = new DateTime($start_time);
 	$end = new DateTime($end_time);
-    // $date = new DateTime($date);
 
     $array = get_time_ranges($start,$end,$interval);
-// print_r($array);die;
     function get_time_ranges($start,$end,$int=60){
         $timeRanges = [];
         $tr_c = 0;
@@ -129,18 +125,6 @@ $schedule = $_GET['schedule'];
                     <label for="time_slot" class="control-label" >Time Slot</label>
                     <input type="hidden" id="timeslot" name="timeslot" value="" />
                     <?php 
-                    // $current_time = date('H:i:s');
-                    // $today_date = date('Y-m-d');
-                    // $myTime = '22:00';
-                    // $test = date('Y-m-d H:i', strtotime($myTime));
-                    // $ts_disabled = 'false';
-                    // if (date('Y-m-d H:i') < date('Y-m-d H:i', strtotime($myTime))) {
-                    //     $ts_disabled = 'true';
-
-                    // }
-                    // print_r($ts_disabled);die;
-                    // $array[]=
-                    
                         foreach ($array as $key => $value)  {
                             $start_datetime = $schedule." ".$value['slot_start_time'];
                             $end_datetime = $schedule." ".$value['slot_end_time'];
@@ -151,7 +135,6 @@ $schedule = $_GET['schedule'];
                             if (strtotime(date("Y-m-d H:i:s")) < $start_datetime_string || strtotime(date("Y-m-d H:i:s")) < $end_datetime_string) {
                                 $ts_disabled = true;
                             }
-                            // print_r($ts_disabled);die;
                             ?>
                        
                                 <div class ="col-md-4">

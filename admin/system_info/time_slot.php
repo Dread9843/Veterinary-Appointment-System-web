@@ -17,6 +17,7 @@ require_once 'dashboard/sess_auth.php';
 			<div id="msg" class="form-group"></div>
 			<fieldset>
 				<legend>Time Slots</legend>
+				<small><i>Clinic Schedule - <?php echo $_settings->info('clinic_schedule') ?></i></small>
 				<div class="form-group">
 					<label for="time_slots" class="control-label">Interval</label>
 					<input type="number" class="form-control form-control-sm col-sm-3" name="interval" id="interval" value="<?php echo $_settings->info('interval') ?>">

@@ -116,12 +116,19 @@ $(document).ready(function() {
                     type: 'POST',
                     success: function(resp) {
                         if (resp == 1) {
-                            // alert_toast("Data successfully saved",'success')
+                            debugger
                             location.reload()
+                        }else if(resp == 2){
+                            debugger
+                            $('#msg').html('<div class="alert alert-danger err_msg">Time slot should be between given time</div>')
+                            $("html, body").animate({ scrollTop: 0 }, "fast");
                         } else {
+                            debugger
                             $('#msg').html('<div class="alert alert-danger err_msg">An Error occured</div>')
-                            end_load()
+                            $("html, body").animate({ scrollTop: 0 }, "fast");
                         }
+                        end_loader();
+
                     }
                 })
     

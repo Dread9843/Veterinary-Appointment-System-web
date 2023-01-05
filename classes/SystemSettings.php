@@ -192,21 +192,42 @@ class SystemSettings extends DBConnection{
 	//manage time slot
 	function time_slots()
 	{
+		
 		$data = "";
-		foreach ($_POST as $key => $value) {
-			if(!in_array($key,array("content")))
-			if(isset($_SESSION['system_info'][$key])){
-				$value = str_replace("'", "&apos;", $value);
-				$qry = $this->conn->query("UPDATE system_info set meta_value = '{$value}' where meta_field = '{$key}' ");
-			}else{
-				$qry = $this->conn->query("INSERT into system_info set meta_value = '{$value}', meta_field = '{$key}' ");
+		$check_startend_time = $_SESSION['system_info']['clinic_schedule'];
+		$explode_data = explode('-', $check_startend_time);
+		$start = $explode_data[0];
+		$end = $explode_data[1];
+
+		$clinic_start = new DateTime($start);
+		$clinic_end = new DateTime($end);
+
+		$clinic_start_time = $clinic_start->format('H:i');
+		$clinic_end_time = $clinic_end->format('H:i');
+		if ($_POST['start_time'] >= $clinic_start_time && $_POST['end_time'] <= $clinic_end_time) {
+			foreach ($_POST as $key => $value) {
+				if(!in_array($key,array("content")))
+				if(isset($_SESSION['system_info'][$key])){
+					$value = str_replace("'", "&apos;", $value);
+					$qry = $this->conn->query("UPDATE system_info set meta_value = '{$value}' where meta_field = '{$key}' ");
+				}else{
+					$qry = $this->conn->query("INSERT into system_info set meta_value = '{$value}', meta_field = '{$key}' ");
+				}
+			}
+			if($qry)
+			{
+				$this->set_flashdata('success','Timeslot Successfully Updated.');
+				$resp['status'] = 1;
 			}
 		}
-		$update = $this->update_system_info();
-		$flash = $this->set_flashdata('success','Time Slot Successfully Updated.');
-		if($update && $flash){
-			return true;
+		else{
+			$resp['status'] = 2;
 		}
+
+		$update = $this->update_system_info();
+
+		return  $resp['status'];
+
 	}
 }
 $_settings = new SystemSettings();
