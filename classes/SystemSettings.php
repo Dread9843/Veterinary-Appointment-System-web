@@ -28,6 +28,8 @@ class SystemSettings extends DBConnection{
 			}
 		return true;
 	}
+
+	//manage system
 	function update_settings_info(){
 		$data = "";
 		foreach ($_POST as $key => $value) {
@@ -186,6 +188,26 @@ class SystemSettings extends DBConnection{
 			$_SESSION['system_info'][$field] = $value;
 		}
 	}
+
+	//manage time slot
+	function time_slots()
+	{
+		$data = "";
+		foreach ($_POST as $key => $value) {
+			if(!in_array($key,array("content")))
+			if(isset($_SESSION['system_info'][$key])){
+				$value = str_replace("'", "&apos;", $value);
+				$qry = $this->conn->query("UPDATE system_info set meta_value = '{$value}' where meta_field = '{$key}' ");
+			}else{
+				$qry = $this->conn->query("INSERT into system_info set meta_value = '{$value}', meta_field = '{$key}' ");
+			}
+		}
+		$update = $this->update_system_info();
+		$flash = $this->set_flashdata('success','Time Slot Successfully Updated.');
+		if($update && $flash){
+			return true;
+		}
+	}
 }
 $_settings = new SystemSettings();
 $_settings->load_system_info();
@@ -195,6 +217,8 @@ switch ($action) {
 	case 'update_settings':
 		echo $sysset->update_settings_info();
 		break;
+	case 'time_slot':
+		echo $sysset->time_slots();
 	default:
 		// echo $sysset->index();
 		break;

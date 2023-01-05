@@ -118,10 +118,10 @@ while($row = $appointments->fetch_assoc()){
             //Random default events
             events: [
                 {
-                    daysOfWeek: [0,1,2,3,4,5,6], // these recurrent events move separately
+                    daysOfWeek: [0,1,2,3,4,5], // these recurrent events move separately
                     title:0,
                     allDay: true,
-                    }
+                }
             ],
             validRange:{
                 start: moment(date).format("YYYY-MM-DD"),
@@ -138,5 +138,5 @@ while($row = $appointments->fetch_assoc()){
         });
 
     calendar.render();
-    })
+    });
 </script>

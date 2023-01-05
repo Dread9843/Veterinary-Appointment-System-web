@@ -1,6 +1,15 @@
 <?php
 require_once('../config.php');
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../phpmailer/src/Exception.php';
+require '../phpmailer/src/PHPMailer.php';
+require '../phpmailer/src/SMTP.php';
+
+
+
 Class Customer extends DBConnection {
 	private $settings;
 	public function __construct(){
@@ -42,41 +51,78 @@ Class Customer extends DBConnection {
 
 			if($qry)
 			{
-				$email = $_POST['email'];
-				$email = $email;
-				$fromEmail = "anjalifyp2022@gmail.com";
-				$subject = "One Time Password";
-    			$message = "Your OTP verification code is $otp";
-		
-				$to = $email;
-    			$subject = $subject;
-				$message = $message;
+				$mail = new PHPMailer(true);
 
-				$result = mail($to,$subject,$message);
+				$mail->isSMTP();
+				$mail->Host = 'smtp.gmail.com';
+				$mail->SMTPAuth = true;
+				$mail->Username = 'sahilfyp2022@gmail.com';
+				$mail->Password = 'ltuboawmayvwsopy';
+
+				$mail->SMTPSecure = 'ssl';
+				$mail->Port = 465;
 				
-				if($result)
+				$mail->setFrom('sahilfyp2022@gmail.com');
+				
+				$toEmail = $_POST['email'];
+				
+				$mail->addAddress($toEmail);
+				
+				$mail->isHTML(true);
+				
+				$mail->Subject = "One Time Password";
+				$mail->Body = "Your OTP verification code is $otp";
+				
+				$mail->send();
+				
+				if($mail)
 				{
-					// echo '<script>alert("Mail sent successfully !")</script>';
-					print_r('success');
-					// exit();
-				
-			
+					return 1;
+					exit;
+					// $resp['status'] = 1;
+					// redirect('./otp_verification.php');
 				}
 				else
 				{
-					// echo '<script>alert("Mail could not be send !")</script>';
-					print_r('error');
-					// exit();
+					$resp['status'] = 'failed';
+					$resp['msg'] = "Failed to send mail.";
 				}
 				
-				
-				
+			}
+			else
+			{
+				$resp['status'] = 'failed';
+				$resp['msg'] = "Error Occured";
 			}
 		}
-        // if(isset($resp['msg']))
-		// $this->settings->set_flashdata('success',$resp['msg']);
-		// return  $resp['status'];
     }
+
+	function otp_verify()
+	{
+		// print_r($_POST['otp']);
+		extract($_POST);
+		$otp = $_POST['otp'];
+		// $select_otp =  $this->conn->query("SELECT otp from users where otp = '$otp'");
+		$sql =  "SELECT otp FROM users where otp=$otp";
+		$result = $this->conn->query($sql);
+		if ($result->num_rows > 0) {
+			$update = $this->conn->query("UPDATE `users` set `user_status` = 'verified' where otp = '{$otp}'");
+			return 1;
+			exit;
+		} 
+		else {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Invalid OTP.";
+		}
+
+	}
+
+	public function logout(){
+		session_destroy();
+    	unset($_SESSION['Auth']['User']['fullname']);
+		unset($_SESSION['Auth']['User']['type']);
+		redirect('./admin');
+	}
 
 
 
@@ -88,6 +134,12 @@ $sysset = new SystemSettings();
 switch ($action) {
 	case 'create_user':
 		echo $Customer->create_user();
+	break;
+	case 'otp_verify':
+		echo $Customer->otp_verify();
+	break;
+	case 'logout':
+		echo $Customer->logout();
 	break;
 	default:
 		// echo $sysset->index();

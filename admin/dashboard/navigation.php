@@ -47,7 +47,15 @@
                         </p>
                       </a>
                     </li>
-                    <?php if($_settings->userdata('type') == 1): ?>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=customer/list" class="nav-link nav-customer_list">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                          Manage Customers
+                        </p>
+                      </a>
+                    </li>
+                    <?php if(isset($_SESSION['Auth']['User']['type']) && $_SESSION['Auth']['User']['type'] == '1'): ?>
                     <li class="nav-header"><h4>Settings</h4></li>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=categories" class="nav-link nav-categories">
@@ -78,6 +86,14 @@
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
                           Manage System
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=system_info/time_slot" class="nav-link nav-time_slot">
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>
+                          Manage Time Slot
                         </p>
                       </a>
                     </li>

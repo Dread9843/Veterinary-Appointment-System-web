@@ -47,7 +47,8 @@
                         <div class="row">
                             <div class="col-md-10">
                             <small>Contact</small>
-                                <input type="text" class="form-control form-control-sm form-control-border" id="contact" name="contact" required placeholder="Contact No.">
+                                <input type="tel" class="form-control form-control-sm form-control-border" id="contact" name="contact" pattern="^\d{10}$" required placeholder="Contact No.">
+                                <small class="text-info"><i>Phone number must be of 10 digits.</i></small>
                             </div>
                         </div>
                         <div class="row">

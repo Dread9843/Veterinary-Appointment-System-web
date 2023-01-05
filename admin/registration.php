@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="en" class="" style="height: auto;">
-<body class="hold-transition ">
+
   <style>
-    html, body{
-      height:calc(100%) !important;
-      width:calc(100%) !important;
-    }
-    body{
-      background-image: url("<?php echo validate_image($_settings->info('cover')) ?>");
-      background-size:cover;
-      background-repeat:no-repeat;
-    }
+   
     .register-title{
       text-shadow: 2px 2px black
     }
@@ -55,7 +45,8 @@
             </div>
             <div class="form-group">
                 <label>Phone Number</label>
-                <input type="number" class="form-control" name="phone" id="phone" placeholder="Phone Number" required autofocus>
+                <input type="tel" class="form-control" name="phone" id="phone" placeholder="Phone Number" pattern="^\d{10}$" required autofocus>
+                <small class="text-info"><i>Phone number must be of 10 digits.</i></small>
             </div>
             <div class="form-group">
                 <label>Email Address</label>
@@ -91,20 +82,18 @@ $(function(){
       method: 'POST',
       type: 'POST',
 			success:function(resp){
-				if(resp ==1){
-					location.reload();
-				}else{
-					$('#msg').html('<div class="alert alert-danger">Email already exist! Try new one.</div>')
+				if(resp == 1){
+          location.href = _base_url_+"./?page=user-otp";
+				}
+        else
+        {
+					$('#msg').html('<div class="alert alert-danger">Email already exits. Try new one</div>');
 					$("html, body").animate({ scrollTop: 0 }, "fast");
 				}
-        end_loader()
+        end_loader();
 			}
     })
   })
 });
 
 </script>
-
-
-</body>
-</html>

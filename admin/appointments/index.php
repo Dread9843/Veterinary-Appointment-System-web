@@ -1,3 +1,6 @@
+<?php
+require_once 'dashboard/sess_auth.php';
+?>
 <div class="card card-outline border border-success">
 	<div class="card-header">
 		<h3 class="card-title"><b>List of Appoitments</b></h3>
@@ -44,7 +47,7 @@
 										case 1:
 											echo '<span class="rounded-pill badge badge-success">Confirmed</span>';
 											break;
-										case 3:
+										case 2:
 											echo '<span class="rounded-pill badge badge-danger">Cancelled</span>';
 											break;
 									}

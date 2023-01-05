@@ -1,3 +1,6 @@
+<?php
+require_once 'inc/sess_auth.php';
+?>
 <style>
     .fc-event-title-container{
         text-align:center;
@@ -17,11 +20,11 @@ while($row = $appointments->fetch_assoc()){
 <div class="content py-5">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card card-outline rounded-1 shadow border border-success">
+            <div class="card card-outline border border-success rounded-1 shadow">
                 <div class="card-header rounded-0">
-                        <h4 class="card-title"><b>Appointment Availablity</b></h4>
+                        <h4 class="card-title">Appointment Availablity</h4>
                 </div>
-                <div class="card-body ">
+                <div class="card-body">
                    <div id="appointmentCalendar"></div>
                 </div>
             </div>
@@ -49,10 +52,11 @@ while($row = $appointments->fetch_assoc()){
             //Random default events
             events: [
                 {
-                    daysOfWeek: [0,1,2,3,4,5,6], // these recurrent events move separately
+                    // daysOfWeek: [0,1,2,3,4,5,6], // these recurrent events move separately
+                    daysOfWeek: [0,1,2,3,4,5], 
                     title:'<?= $_settings->info('max_appointment') ?>',
                     allDay: true,
-                    }
+                }
             ],
             eventClick: function(info) {
                    console.log(info.el)
@@ -68,7 +72,7 @@ while($row = $appointments->fetch_assoc()){
                     var available = parseInt(info.event.title) - parseInt(appointment[info.event.startStr]);
                      $(info.el).find('.fc-event-title.fc-sticky').text(available)
                 }
-                end_loader()
+                end_loader();
             },
             editable  : true
         });

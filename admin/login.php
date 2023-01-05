@@ -48,9 +48,10 @@ require_once 'dashboard/sess_auth.php';
             <h4 class="text-purle text-center"><b>Login</b></h4>
           </div>
           <div class="card-body rounded-0">
+          <div id="msg"></div>
             <form id="login-frm" action="" method="post">
               <div class="input-group mb-3">
-                <input type="text" class="form-control" autofocus name="username" placeholder="Email Address" required>
+                <input type="email" class="form-control" autofocus name="email" placeholder="Email Address" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-user"></span>
@@ -69,7 +70,7 @@ require_once 'dashboard/sess_auth.php';
               <button type="submit" class="btn btn-sm btn-success ">Sign In</button>
               </div>
               <div class="text-center">
-                <p>Don't have account ? <a href="./registration.php"> Sign Up Here</a></p>
+                <p>Don't have account ? <a href="../?page=admin/registration"> Sign Up Here</a></p>
                 <a href="<?php echo base_url ?>">Go to Website</a>
               </div>
               
@@ -79,12 +80,6 @@ require_once 'dashboard/sess_auth.php';
       </div>
     </div>
   </div>
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
 
 <script>
   $(document).ready(function(){

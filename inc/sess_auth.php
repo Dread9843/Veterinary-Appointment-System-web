@@ -9,9 +9,9 @@ else
 $link .= "://"; 
 $link .= $_SERVER['HTTP_HOST']; 
 $link .= $_SERVER['REQUEST_URI'];
-if(!strpos($link, 'login.php') && !strpos($link, 'registration.php') && (!isset($_SESSION['userdata']) || (isset($_SESSION['userdata']['login_type']) && $_SESSION['userdata']['login_type'] != 2)) ){
-	redirect('login.php');
+if(!strpos($link, 'login.php') && (!isset($_SESSION['Auth']['User']['fullname']) || (isset($_SESSION['Auth']['User']['type']) && $_SESSION['Auth']['User']['type'] != 3)) ){
+	redirect('admin');
 }
-if(strpos($link, 'login.php') && isset($_SESSION['userdata']['login_type']) && $_SESSION['userdata']['login_type'] == 2){
+if(strpos($link, 'login.php') && isset($_SESSION['Auth']['User']['type']) && $_SESSION['Auth']['User']['type'] == 3){
 	redirect('index.php');
 }

@@ -24,21 +24,11 @@
 		<div class="container-fluid">
         <div class="container-fluid">
 			<table class="table table-hover table-striped">
-				<!-- <colgroup>
-					<col width="5%">
-					<col width="10%">
-					<col width="20%">
-					<col width="20%">
-					<col width="15%">
-					<col width="15%">
-					<col width="10%">
-				</colgroup> -->
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>Avatar</th>
 						<th>Name</th>
-						<th>Username</th>
+						<th>Email</th>
 						<th>User Type</th>
 						<th>Action</th>
 					</tr>
@@ -46,27 +36,29 @@
 				<tbody>
 					<?php 
 						$i = 1;
-						$qry = $conn->query("SELECT *,concat(firstname,' ',lastname) as name from `users` where id != '1' order by concat(firstname,' ',lastname) asc ");
+						$qry = $conn->query("SELECT *,fullname as name from `users` where type != '3' order by fullname asc ");
 						while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
-							<td class="text-center"><img src="<?php echo validate_image($row['avatar']) ?>" class="img-avatar img-thumbnail p-0 border-2" alt="user_avatar"></td>
 							<td><?php echo ucwords($row['name']) ?></td>
-							<td ><p class="m-0 truncate-1"><?php echo $row['username'] ?></p></td>
-							<td ><p class="m-0"><?php echo ($row['type'] == 1 )? "Adminstrator" : "Staff" ?></p></td>
+							<td ><p class="m-0 truncate-1"><?php echo $row['email'] ?></p></td>
+							<td ><p class="m-0">
+								<?php if($row['type'] == 1){
+									echo "Adminstrator";
+								}elseif($row['type'] == 2){
+									echo "Staff";
+								}else{
+									echo "Customer";
+								} ?></p></td>
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
 				                  		Action
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item" href="?page=user/manage_user&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+									<a class="dropdown-item" href="?page=user/manage_user&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 				                    <div class="dropdown-divider"></div>
-									<?php if($row['status'] != 1): ?>
-				                    <a class="dropdown-item verify_user" href="javascript:void(0)" data-id="<?= $row['id'] ?>"  data-name="<?= $row['username'] ?>"><span class="fa fa-check text-primary"></span> Verify</a>
-				                    <div class="dropdown-divider"></div>
-									<?php endif; ?>
 				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 				                  </div>
 							</td>
@@ -85,36 +77,12 @@
 		})
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
 		$('.table').dataTable();
-		$('.verify_user').click(function(){
-			_conf("Are you sure to verify <b>"+$(this).attr('data-name')+"<b/>?","verify_user",[$(this).attr('data-id')])
-		})
+	
 	})
 	function delete_user($id){
 		start_loader();
 		$.ajax({
 			url:_base_url_+"classes/Users.php?f=delete",
-			method:"POST",
-			data:{id: $id},
-			dataType:"json",
-			error:err=>{
-				console.log(err)
-				alert_toast("An error occured.",'error');
-				end_loader();
-			},
-			success:function(resp){
-				if(typeof resp== 'object' && resp.status == 'success'){
-					location.reload();
-				}else{
-					alert_toast("An error occured.",'error');
-					end_loader();
-				}
-			}
-		})
-	}
-	function verify_user($id){
-		start_loader();
-		$.ajax({
-			url:_base_url_+"classes/Users.php?f=verify_user",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",

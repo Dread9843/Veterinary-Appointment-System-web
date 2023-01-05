@@ -29,10 +29,10 @@
 </style>
 <div class="col-lg-12 py-5">
     <div class="contain-fluid">
-        <div class="card card-outline card-lightblue shadow rounded-0">
+        <div class="card card-outline card-lightblue shadow rounded-1 border border-success">
             <div class="card-body rounded-0">
                 <div class="container-fluid">
-                    <h3 class="text-center">Welcome</h3>
+                    <h3 class="text-center">Welcome to VetCare</h3>
                     <hr>
                     <div class="welcome-content">
                         <?php include("welcome.html") ?>

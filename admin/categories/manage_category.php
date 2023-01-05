@@ -24,43 +24,45 @@ if(isset($_GET['id'])){
     $(function(){
         $('#uni_modal #category-form').submit(function(e){
             e.preventDefault();
-            var _this = $(this)
-            $('.pop-msg').remove()
-            var el = $('<div>')
-                el.addClass("pop-msg alert")
-                el.hide()
-            start_loader();
-            $.ajax({
-                url:_base_url_+"classes/Master.php?f=save_category",
-				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
-					console.log(err)
-					alert_toast("An error occured",'error');
-					end_loader();
-				},
-                success:function(resp){
-                    if(resp.status == 'success'){
-                        location.reload();
-                    }else if(!!resp.msg){
-                        el.addClass("alert-danger")
-                        el.text(resp.msg)
-                        _this.prepend(el)
-                    }else{
-                        el.addClass("alert-danger")
-                        el.text("An error occurred due to unknown reason.")
-                        _this.prepend(el)
+            if ($('#uni_modal #category-form').valid()) {
+                var _this = $(this)
+                $('.pop-msg').remove()
+                var el = $('<div>')
+                    el.addClass("pop-msg alert")
+                    el.hide()
+                start_loader();
+                $.ajax({
+                    url:_base_url_+"classes/Master.php?f=save_category",
+                    data: new FormData($(this)[0]),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    method: 'POST',
+                    type: 'POST',
+                    dataType: 'json',
+                    error:err=>{
+                        console.log(err)
+                        alert_toast("An error occured",'error');
+                        end_loader();
+                    },
+                    success:function(resp){
+                        if(resp.status == 'success'){
+                            location.reload();
+                        }else if(!!resp.msg){
+                            el.addClass("alert-danger")
+                            el.text(resp.msg)
+                            _this.prepend(el)
+                        }else{
+                            el.addClass("alert-danger")
+                            el.text("An error occurred due to unknown reason.")
+                            _this.prepend(el)
+                        }
+                        el.show('slow')
+                        $('html,body,.modal').animate({scrollTop:0},'fast')
+                        end_loader();
                     }
-                    el.show('slow')
-                    $('html,body,.modal').animate({scrollTop:0},'fast')
-                    end_loader();
-                }
-            })
+                })
+            }
         })
     })
 </script>

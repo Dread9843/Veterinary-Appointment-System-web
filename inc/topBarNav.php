@@ -27,83 +27,61 @@
           padding-top: calc(3.2em) !important
       }
       </style>
-      <!-- <nav class="w-100 px-2 py-1 position-fixed top-0 bg-light text-dark" id="login-nav">
-        <div class="d-flex justify-content-between w-100">
-          <div>
-            <span class="mr-2"><i class="fa fa-phone mr-1"></i> <?= $_settings->info('contact') ?></span>
-          </div>
-          <div>
-            <?php if($_settings->userdata('id') > 0): ?>
-              <span class="mx-2"><img src="<?= validate_image($_settings->userdata('avatar')) ?>" alt="User Avatar" id="student-img-avatar"></span>
-              <span class="mx-2">Howdy, <?= !empty($_settings->userdata('username')) ? $_settings->userdata('username') : $_settings->userdata('email') ?></span>
-            <?php if($_settings->userdata('login_type') == 1): ?>
-              <span class="mx-1"><a href="<?= base_url.'classes/Login.php?f=logout' ?>"><i class="fa fa-power-off"></i></a></span>
-            <?php else: ?>
-              <span class="mx-1"><a href="<?= base_url.'classes/Login.php?f=client_logout' ?>"><i class="fa fa-power-off"></i></a></span>
-            <?php endif; ?>
-            <?php else: ?>
-              <a href="./admin" class="mx-2 text-dark">Admin Login</a>
-            <?php endif; ?>
-          </div>
-        </div>
-      </nav> -->
-      <nav class="main-header navbar navbar-expand navbar-dark border-0 text-sm bg-gradient-dark" id='top-Nav'>
-        
-        <div class="container">
-          <a href="./" class="navbar-brand">
-            <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Site Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span><?= $_settings->info('short_name') ?></span>
+ 
+
+      <!--Bootstrap 4.5.3 navbar-->
+      <nav class="navbar navbar-expand-lg navbar-dark">
+      <a href="./" class="navbar-brand">
+            <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Site Logo" class="img-fluid brand-image img-circle elevation-3 mx-2" style="opacity: .8; height: 50px">
+            <span class="mx-3"><?= $_settings->info('short_name') ?></span>
           </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-          <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse order-3" id="navbarCollapse">
-            <!-- Left navbar links -->
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a href="./" class="nav-link <?= isset($page) && $page =='home' ? "active" : "" ?>">Home</a>
-              </li>
-              <li class="nav-item">
-                <a href="./?page=appointment" class="nav-link <?= isset($page) && $page =='appointment' ? "active" : "" ?>">Appointment</a>
-              </li>
-              <li class="nav-item">
-                <a href="./?page=services" class="nav-link <?= isset($page) && $page =='services' ? "active" : "" ?>">Our Services</a>
-              </li>
-              <li class="nav-item">
-                <a href="./?page=about" class="nav-link <?= isset($page) && $page =='about' ? "active" : "" ?>">About Us</a>
-              </li>
-              <li class="nav-item">
-                <a href="./?page=contact_us" class="nav-link <?= isset($page) && $page =='contact_us' ? "active" : "" ?>">Contact Us</a>
-              </li>
-              <?php if($_settings->userdata('id') > 0 && $_settings->userdata('login_type' != 1)): ?>
-              <li class="nav-item">
-                <a href="./?page=profile" class="nav-link <?= isset($page) && $page =='profile' ? "active" : "" ?>">Profile</a>
-              </li>
-              <?php else: ?>
-                <li class="nav-item">
-              <a href="./admin" class="nav-link">Login</a>
-              </li>
-              <li class="nav-item">
-              <a href="./?page=admin/registration" class="nav-link">Sign Up</a>
-              </li>
-              <?php endif; ?>
-              <!-- <li class="nav-item">
-                <a href="#" class="nav-link">Contact</a>
-              </li> -->
-            </ul>
-
-            
-          </div>
-          <!-- Right navbar links -->
-          <div class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-          </div>
-        </div>
-      </nav>
-      <!-- /.navbar -->
-      <script>
-        $(function(){
-          
-        })
-      </script>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav m-auto">
+      <li class="nav-item active">
+      <a href="./" class="nav-link <?= isset($page) && $page =='home' ? "active" : "" ?>">Home</a>
+      </li>
+     
+      <li class="nav-item">
+      <a href="./?page=services" class="nav-link <?= isset($page) && $page =='services' ? "active" : "" ?>">Our Services</a>
+      </li>
+      <li class="nav-item">
+      <a href="./?page=about" class="nav-link <?= isset($page) && $page =='about' ? "active" : "" ?>">About Us</a>
+      </li>
+      <li class="nav-item">
+      <a href="./?page=contact_us" class="nav-link <?= isset($page) && $page =='contact_us' ? "active" : "" ?>">Contact Us</a>
+      </li>
+      <?php if(isset($_SESSION['Auth']['User']['type']) && $_SESSION['Auth']['User']['type'] == '3'): ?>
+        <li class="nav-item">
+          <a href="./?page=appointment" class="nav-link <?= isset($page) && $page =='appointment' ? "active" : "" ?>">Appointment</a>
+        </li>
+        <li class="nav-item">
+            <div class="btn-group nav-link">
+                  <button type="button" class="btn btn-rounded badge badge-light dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                  <span>Hello,&nbsp;<?php echo ucwords($_SESSION['Auth']['User']['fullname']) ?></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <div class="dropdown-menu" role="menu">
+                    <a class="dropdown-item" href="./?page=profile"><span class="fa fa-user"></span> Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="<?php echo base_url.'/classes/Customer.php?f=logout' ?>"><span class="fas fa-sign-out-alt"></span> Logout</a>
+                  </div>
+              </div>
+          </li>
+          <span class="ml-3"></span>
+        </li>
+      <?php else: ?>
+        <li class="nav-item">
+          <a href="./admin" class="nav-link">Login</a>
+        </li>
+        <li class="nav-item">
+          <a href="./?page=admin/registration" class="nav-link">Sign Up</a>
+        </li>
+      <?php endif; ?>
+    
+    </ul>
+  </div>
+</nav>

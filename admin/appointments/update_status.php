@@ -1,3 +1,15 @@
+<?php 
+require_once('../../config.php');
+if(isset($_GET['id'])){
+    $qry = $conn->query("SELECT status from `appointment_list` where id = '{$_GET['id']}'");
+    if($qry->num_rows > 0){
+        while($row = $qry->fetch_assoc())
+        {
+            $status = $row['status'];
+        }
+    }
+}
+?>
 <div class="container-fluid">
     <form action="" id="update-form">
         <input type="hidden" name="id" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">

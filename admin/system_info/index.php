@@ -1,6 +1,9 @@
+<?php
+require_once 'dashboard/sess_auth.php';
+?>
 <?php if($_settings->chk_flashdata('success')): ?>
 <script>
-	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
+	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success');
 </script>
 <?php endif;?>
 
@@ -22,9 +25,6 @@
 	<div class="card card-outline rounded-1 shadow border border-success">
 		<div class="card-header">
 			<h5 class="card-title"><b>System Information</b></h5>
-			<!-- <div class="card-tools">
-				<a class="btn btn-block btn-sm btn-default btn-flat border-primary new_department" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
-			</div> -->
 		</div>
 		<div class="card-body">
 			<form action="" id="system-frm">
@@ -85,6 +85,10 @@
 				<div class="form-group">
 					<label for="max_appointment" class="control-label">Maximum Patient a day</label>
 					<input type="number" class="form-control form-control-sm col-sm-3" name="max_appointment" id="max_appointment" value="<?php echo $_settings->info('max_appointment') ?>">
+				</div>
+				<div class="form-group">
+					<label for="max_appointment" class="control-label">Maximum Patient as per time slot</label>
+					<input type="number" class="form-control form-control-sm col-sm-3" name="max_patient" id="max_patient" value="<?php echo $_settings->info('max_patient') ?>">
 				</div>
 				<div class="form-group">
 					<label for="clinic_schedule" class="control-label">Clinic Daily Schedule <small><em>i.e.(8:00 AM - 5:30 PM)</em></small></label>

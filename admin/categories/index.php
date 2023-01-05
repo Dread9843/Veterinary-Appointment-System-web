@@ -1,3 +1,6 @@
+<?php
+require_once 'dashboard/sess_auth.php';
+?>
 <style>
     .img-thumb-path{
         width:100px;

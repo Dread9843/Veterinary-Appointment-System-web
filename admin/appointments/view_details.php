@@ -16,12 +16,15 @@ else{
     echo "<script>alert('Appointment Request ID is required'); location.replace('./?page=appointments');</script>";
 }
 $service = "";
-$services = $conn->query("SELECT * FROM `service_list` where id in ({$service_ids}) order by `name` asc");
-while($row = $services->fetch_assoc()){
-    if(!empty($service)) $service .=", ";
-    $service .=$row['name'];
+if(isset($service_ids)){
+    $services = $conn->query("SELECT * FROM `service_list` where id in ({$service_ids}) order by `name` asc");
+
+    while($row = $services->fetch_assoc()){
+        if(!empty($service)) $service .=", ";
+        $service .=$row['name'];
+    }
+    $service = (empty($service)) ? "N/A" : $service;
 }
-$service = (empty($service)) ? "N/A" : $service;
 ?>
 <style>
     @media screen {
@@ -40,9 +43,9 @@ $service = (empty($service)) ? "N/A" : $service;
     }
 </style>
 <div class="content py-3">
-    <div class="card card-outline card-dark rounded-0">
+    <div class="card card-outline rounded-1 border border-success ">
         <div class="card-header rounded-0">
-            <h5 class="card-title text-primary">Appointment Request Details</h5>
+            <h5 class="card-title">Appointment Request Details</h5>
         </div>
         <div class="card-body">
             <div class="container-fluid">
@@ -56,7 +59,7 @@ $service = (empty($service)) ? "N/A" : $service;
                                         <col width="70%">
                                     </colgroup>
                                     <tr>
-                                        <th class="text-muted text-white bg-gradient-dark px-2 py-1">Appointment Request Code</th>
+                                        <th class="text-muted text-white bg-gradient-olive px-2 py-1">Appointment Request Code</th>
                                         <td><?= ($code) ?></td>
                                     </tr>
                                 </table>
@@ -76,10 +79,10 @@ $service = (empty($service)) ? "N/A" : $service;
                                                     <th class="py-1 px-2 text-light bg-gradient-info">Name</th>
                                                     <td class="py-1 px-2 text-right"><?= ucwords($owner_name) ?></td>
                                                 </tr>
-                                                <tr class="border-info">
+                                                <!-- <tr class="border-info">
                                                     <th class="py-1 px-2 text-light bg-gradient-info">Contact #</th>
                                                     <td class="py-1 px-2 text-right"><?= ($contact) ?></td>
-                                                </tr>
+                                                </tr> -->
                                                 <tr class="border-info">
                                                     <th class="py-1 px-2 text-light bg-gradient-info">Email</th>
                                                     <td class="py-1 px-2 text-right"><?= ($email) ?></td>
@@ -106,7 +109,7 @@ $service = (empty($service)) ? "N/A" : $service;
                                                 </tr>
                                                 <tr class="border-info">
                                                     <th class="py-1 px-2 text-light bg-gradient-info">Breed</th>
-                                                    <td class="py-1 px-2 text-right"><?= ($breed) ?></td>
+                                                    <td class="py-1 px-2 text-right"><?= ($breed) ? ($breed) : 'N/A'?></td>
                                                 </tr>
                                                 <tr class="border-info">
                                                     <th class="py-1 px-2 text-light bg-gradient-info">Age</th>
@@ -114,7 +117,7 @@ $service = (empty($service)) ? "N/A" : $service;
                                                 </tr>
                                                 <tr class="border-info">
                                                     <th class="py-1 px-2 text-light bg-gradient-info">Service(s) Needed</th>
-                                                    <td class="py-1 px-2 text-right"><?= ($service) ?></td>
+                                                    <td class="py-1 px-2 text-right"><?= ($service) ? ($service) : 'N/A' ?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
