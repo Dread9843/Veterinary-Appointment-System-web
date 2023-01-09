@@ -47,9 +47,7 @@
 								<?php if($row['type'] == 1){
 									echo "Adminstrator";
 								}elseif($row['type'] == 2){
-									echo "Staff";
-								}else{
-									echo "Customer";
+									echo "Doctor";
 								} ?></p></td>
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">

@@ -21,6 +21,7 @@ Class Customer extends DBConnection {
 		parent::__destruct();
 	}
 
+	//register user
 	function create_user()
 	{
 		extract($_POST);
@@ -79,8 +80,6 @@ Class Customer extends DBConnection {
 				{
 					return 1;
 					exit;
-					// $resp['status'] = 1;
-					// redirect('./otp_verification.php');
 				}
 				else
 				{
@@ -97,12 +96,11 @@ Class Customer extends DBConnection {
 		}
     }
 
+	//send otp
 	function otp_verify()
 	{
-		// print_r($_POST['otp']);
 		extract($_POST);
 		$otp = $_POST['otp'];
-		// $select_otp =  $this->conn->query("SELECT otp from users where otp = '$otp'");
 		$sql =  "SELECT otp FROM users where otp=$otp";
 		$result = $this->conn->query($sql);
 		if ($result->num_rows > 0) {
@@ -117,14 +115,13 @@ Class Customer extends DBConnection {
 
 	}
 
+	//user logout
 	public function logout(){
 		session_destroy();
     	unset($_SESSION['Auth']['User']['fullname']);
 		unset($_SESSION['Auth']['User']['type']);
 		redirect('./admin');
 	}
-
-
 
 }
 

@@ -4,6 +4,9 @@
 ?>
 <head>
   <style>
+    .error{
+      color: red
+    }
     :root{
       --bg-img:url('<?php echo validate_image($_settings->info('cover')) ?>');
     }

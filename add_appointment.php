@@ -100,7 +100,7 @@ $schedule = $_GET['schedule'];
                     </div>
                     <div class="form-group">
                         <label for="age" class="control-label">Age</label>
-                        <input type="text" name="age" id="age" class="form-control form-control-border" placeholder="1 yr. old" value ="<?php echo isset($age) ? $age : '' ?>" required>
+                        <input type="number" name="age" id="age" class="form-control form-control-border" placeholder="1 yr. old" value ="<?php echo isset($age) ? $age : '' ?>" required>
                     </div>
                 </fieldset>
                 <div class="form-group">
@@ -123,7 +123,7 @@ $schedule = $_GET['schedule'];
             <div class ="col">
                 <div class="form-group">
                     <label for="time_slot" class="control-label" >Time Slot</label>
-                    <input type="hidden" id="timeslot" name="timeslot" value="" />
+                    <input type="hidden" id="timeslot_id" name="timeslot" value="" />
                     <?php 
                         foreach ($array as $key => $value)  {
                             $start_datetime = $schedule." ".$value['slot_start_time'];
@@ -189,49 +189,60 @@ $schedule = $_GET['schedule'];
 
         $('#uni_modal #appointment-form').submit(function(e){
             e.preventDefault();
+            if($('#timeslot_id').val() == ''){
+                    // console.log('please select timeslot');
+                    alert('Please select timeslot');
+                    // console.log('false');
+                    return false;
+                }
             if ($('#uni_modal #appointment-form').valid()) {
+                // alert('asdfghj');
                 var _this = $(this)
-                // $('.error').text(style="color:red")
-                $('.pop-msg').remove()
-                var el = $('<div>')
-                    el.addClass("pop-msg alert")
-                    el.hide()
-                start_loader();
+                    // $('.error').text(style="color:red")
+                    $('.pop-msg').remove()
+                    var el = $('<div>')
+                        el.addClass("pop-msg alert")
+                        el.hide()
+                    start_loader();
+                    // debugger;
+                
                 $.ajax({
-                    url:_base_url_+"classes/Master.php?f=save_appointment",
-                    data: new FormData($(this)[0]),
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    method: 'POST',
-                    type: 'POST',
-                    dataType: 'json',
-                    error:err=>{
-                        console.log(err)
-                        alert_toast("An error occured",'error');
-                        end_loader();
-                    },
-                    success:function(resp){
-                        if(resp.status == 'success'){
-                        end_loader();
-                            setTimeout(() => {
-                                uni_modal("Success","success_msg.php?code="+resp.code)
-                                
-                            }, 750);
-                        }else if(!!resp.msg){
-                            el.addClass("alert-danger")
-                            el.text(resp.msg)
-                            _this.prepend(el)
-                        }else{
-                            el.addClass("alert-danger")
-                            el.text("An error occurred due to unknown reason.")
-                            _this.prepend(el)
+                        url:_base_url_+"classes/Master.php?f=save_appointment",
+                        data: new FormData($(this)[0]),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        method: 'POST',
+                        type: 'POST',
+                        dataType: 'json',
+                        error:err=>{
+                            console.log(err)
+                            alert_toast("An error occured",'error');
+                            end_loader();
+                        },
+                        success:function(resp){
+                            if(resp.status == 'success'){
+                            end_loader();
+                                setTimeout(() => {
+                                    uni_modal("Success","success_msg.php?code="+resp.code)
+                                    
+                                }, 750);
+                            }else if(!!resp.msg){
+                                el.addClass("alert-danger")
+                                el.text(resp.msg)
+                                _this.prepend(el)
+                            }else{
+                                el.addClass("alert-danger")
+                                el.text("An error occurred due to unknown reason.")
+                                _this.prepend(el)
+                            }
+                            el.show('slow')
+                            $('html,body,.modal').animate({scrollTop:0},'fast')
+                            end_loader();
                         }
-                        el.show('slow')
-                        $('html,body,.modal').animate({scrollTop:0},'fast')
-                        end_loader();
-                    }
-                })
+                    })
+                
+              
             }
         })
     });
@@ -256,7 +267,7 @@ $schedule = $_GET['schedule'];
             $(this).addClass('timeslot-active');
             var result = $(this).text();
 
-            document.getElementById('timeslot').value = result;
+            document.getElementById('timeslot_id').value = result;
         });
 
 

@@ -15,6 +15,8 @@ class Login extends DBConnection {
 	public function index(){
 		echo "<h1>Access Denied</h1> <a href='".base_url."'>Go Back.</a>";
 	}
+
+	//login
 	public function login(){
 		extract($_POST);
 		$email = $_POST['email'];
@@ -59,10 +61,9 @@ class Login extends DBConnection {
 		}
 
 	}
+
+	//admin or doctor logout
 	public function logout(){
-		// if($this->settings->sess_des()){
-		// 	redirect('admin/login.php');
-		// }
 		session_destroy();
     	unset($_SESSION['Auth']['User']['fullname']);
 		unset($_SESSION['Auth']['User']['type']);

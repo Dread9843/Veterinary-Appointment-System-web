@@ -1,5 +1,8 @@
 <head>
   <style>
+    .error{
+      color: red
+    }
     :root{
       --base_url:<?php echo base_url ?>;
     }
@@ -54,7 +57,8 @@
     <script src="<?php echo base_url ?>plugins/toastr/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-
+  <!-- <script src="<?php echo base_url ?>plugins/jquery-validation/jquery.validate.js"></script>
+  <script src="<?php echo base_url ?>plugins/jquery-validation/jquery.validate.min.js"></script> -->
     <script>
         var _base_url_ = '<?php echo base_url ?>';
     </script>

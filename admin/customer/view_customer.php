@@ -26,6 +26,8 @@ if(isset($_GET['id'])){
         <dd class='pl-4 fs-4 fw-bold'><?= isset($email) ? $email : '' ?></dd>
         <dt class="text-muted">Address</dt>
         <dd class='pl-4 fs-4 fw-bold'><?= isset($address) ? $address : '' ?></dd>
+        <dt class="text-muted">Status</dt>
+        <dd class='pl-4 fs-4 fw-bold'><?= isset($user_status) ? $user_status : '' ?></dd>
     </dl>
     <div class="col-12 text-right">
         <button class="btn btn-flat btn-sm btn-dark" type="button" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>

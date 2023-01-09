@@ -27,6 +27,8 @@ Class Master extends DBConnection {
 			exit;
 		}
 	}
+
+	//send or save message from contact form
 	function save_message(){
 		extract($_POST);
 		$data = "";
@@ -109,6 +111,8 @@ Class Master extends DBConnection {
 		$this->settings->set_flashdata('pop_msg',$resp['msg']);
 		return json_encode($resp);
 	}
+
+	//delete message or inquiry message
 	function delete_message(){
 		extract($_POST);
 		$del = $this->conn->query("DELETE FROM `message_list` where id = '{$id}'");
@@ -123,6 +127,8 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 
 	}
+
+	//save category list
 	function save_category(){
 		extract($_POST);
 		$data = "";
@@ -162,6 +168,8 @@ Class Master extends DBConnection {
 			$this->settings->set_flashdata('success',$resp['msg']);
 		return json_encode($resp);
 	}
+
+	//delete category list
 	function delete_category(){
 		extract($_POST);
 		$del = $this->conn->query("UPDATE `category_list` set delete_flag=1 where id = '{$id}'");
@@ -174,6 +182,8 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+
+	//save service list
 	function save_service(){
 		$_POST['category_ids'] = implode(',',$_POST['category_ids']);
 		extract($_POST);
@@ -214,6 +224,8 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+
+	//delete service list
 	function delete_service(){
 		extract($_POST);
 		$del = $this->conn->query("UPDATE `service_list` set delete_flag = 1 where id = '{$id}'");
@@ -227,6 +239,8 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+
+	//book appointment
 	function save_appointment(){
 
 		if(empty($_POST['id'])){
@@ -246,9 +260,6 @@ Class Master extends DBConnection {
 			$_POST['service_ids'] = implode(",", $_POST['service_id']);
 		}
 		extract($_POST);
-		// echo '<pre>';
-		// print_r($_POST['service_ids'] );
-		// exit();
 		$data = "";
 		foreach($_POST as $k =>$v){
 			if(!in_array($k,array('id')) && !is_array($_POST[$k])){
@@ -259,7 +270,6 @@ Class Master extends DBConnection {
 			}
 		}
 		
-		// date_default_timezone_set("Asia/Kathmandu");
 		$slot_taken = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and `status` in (0,1)")->num_rows;
 		if($slot_taken >= $this->settings->info('max_appointment')){
 			$resp['status'] = 'failed';
@@ -360,6 +370,8 @@ Class Master extends DBConnection {
 		$this->settings->set_flashdata('success',$resp['msg']);
 		return json_encode($resp);
 	}
+
+	//delete appointment
 	function delete_appointment(){
 		extract($_POST);
 		$del = $this->conn->query("DELETE FROM `appointment_list` where id = '{$id}'");
@@ -372,8 +384,11 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+
+	//appointment status update
 	function update_appointment_status(){
 		extract($_POST);
+		
 		$del = $this->conn->query("UPDATE `appointment_list` set `status` = '{$status}' where id = '{$id}'");
 
 		if($del){
@@ -386,11 +401,14 @@ Class Master extends DBConnection {
 				$a_status = "Cancelled";
 			}
 			
-			$select_email = $this->conn->query("SELECT code, email FROM appointment_list WHERE id = '{$id}'");
+			$select_email = $this->conn->query("SELECT * FROM appointment_list WHERE id = '{$id}'");
+			
 			while($row = $select_email->fetch_assoc())
 			{
 				$cus_email = $row['email'];
 				$code = $row['code'];
+				$schedule = $row['schedule'];
+				$timeslot = $row['timeslot'];
 			}
 
 			$bcc_users =$this->conn->query("SELECT email FROM users WHERE TYPE != '3'");
@@ -400,8 +418,6 @@ Class Master extends DBConnection {
 				$bcc[] = $bcc_user['email'];
 			}
 			$bcc_recipients = $bcc;
-			// $e= implode(",", $email_bcc);
-			// $bcc_recipients = explode(',', $e);
 
 			$mail = new PHPMailer(true);
 
@@ -429,7 +445,7 @@ Class Master extends DBConnection {
 			$mailcontent = '';
 			if($a_status == "Confirmed")
 			{
-				$mailcontent = "<p>Your appointment has been '{$a_status}'. Please visit on your booked date.<br>Your appointment code is '{$code}'.<br><br>If you have any queries please contact on VetCare, 9840167003.</p>";
+				$mailcontent = "<p>Your appointment has been '{$a_status}' for '{$schedule}' between '{$timeslot}'. <br>Your appointment code is '{$code}'.<br><br>For more queries please contact on VetCare, 9840167003.</p>";
 			}
 			elseif($a_status == "Cancelled")
 			{
@@ -466,42 +482,6 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 	}
 
-	//register users
-	function create_user()
-	{
-		extract($_POST);
-		$postdata = array();
-		$postdata['fullname'] = $_POST['fullname'];
-		$postdata['address'] = $_POST['address'];
-		$postdata['phone'] = $_POST['phone'];
-		$postdata['email'] = $_POST['email'];
-		$password = $_POST['password'];  
-		$postdata['password'] = password_hash($password, PASSWORD_DEFAULT);
-		$postdata['type'] = '3';
-
-		$count_email =  $this->conn->query("SELECT * from users where email = '{$_POST['email']}'")->num_rows;
-		if($count_email > 0){
-			$this->settings->set_flashdata('error','Email Already Exits.');
-			$resp['status'] = 3;
-		}
-		else
-		{
-			$qry = $this->conn->query("INSERT INTO users (fullname,address,phone,email,password,type) values ('{$postdata['fullname']}','{$postdata['address']}','{$postdata['phone']}','{$postdata['email']}','{$postdata['password']}','{$postdata['type']}')");
-
-			if($qry){
-				$id = $this->conn->insert_id;
-				$this->settings->set_flashdata('success','User Details successfully saved.');
-				$resp['status'] = 1;
-			}else{
-				$resp['status'] = 2;
-			}
-		}
-
-		if(isset($resp['msg']))
-		$this->settings->set_flashdata('success',$resp['msg']);
-		return  $resp['status'];
-		
-	}
 }
 
 $Master = new Master();
@@ -534,9 +514,6 @@ switch ($action) {
 	break;
 	case 'delete_service':
 		echo $Master->delete_service();
-	break;
-	case 'create_user':
-		echo $Master->create_user();
 	break;
 	default:
 		// echo $sysset->index();

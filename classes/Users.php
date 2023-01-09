@@ -10,6 +10,8 @@ Class Users extends DBConnection {
 	public function __destruct(){
 		parent::__destruct();
 	}
+
+	//save users or create users from admin panel
 	public function save_users(){
 		extract($_POST);
 		$oid = $id;
@@ -67,6 +69,7 @@ Class Users extends DBConnection {
 		return  $resp['status'];
 	}
 
+	//delete users
 	public function delete_users(){
 		extract($_POST);
 		$avatar = $this->conn->query("SELECT avatar FROM users where id = '{$id}'")->fetch_array()['avatar'];
