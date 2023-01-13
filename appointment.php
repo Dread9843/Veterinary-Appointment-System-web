@@ -47,6 +47,7 @@ while($row = $appointments->fetch_assoc()){
                 left  : false,
                 center: 'title',
             },
+            
             selectable: true,
             themeSystem: 'bootstrap',
             //Random default events
@@ -54,14 +55,22 @@ while($row = $appointments->fetch_assoc()){
                 {
                     // daysOfWeek: [0,1,2,3,4,5,6], // these recurrent events move separately
                     daysOfWeek: [0,1,2,3,4,5], 
-                    title:'<?= $_settings->info('max_appointment') ?>',
+                    title:'<?= ($_settings->info('max_appointment')) ?>',
                     allDay: true,
+
+                },
+                {
+                    daysOfWeek: [6], // these recurrent events move separately
+                    title:'Closed',
+                    color: 'red',
                 }
             ],
             eventClick: function(info) {
                    console.log(info.el)
                    if($(info.el).find('.fc-event-title.fc-sticky').text() > 0)
                     uni_modal("Set an Appointment","add_appointment.php?schedule="+info.event.startStr,"mid-large")
+                    else
+                    $(info.el).css('cursor','not-allowed');
                 },
             validRange:{
                 start: moment(date).format("YYYY-MM-DD"),

@@ -53,7 +53,7 @@ $schedule = $_GET['schedule'];
 
 <div class="container-fluid">
     <form action="" id="appointment-form">
-    <input type="hidden" name="cus_id" value="<?php echo isset($_SESSION['Auth']['User']['id']) ? $_SESSION['Auth']['User']['id'] : '' ?>">
+        <input type="hidden" name="cus_id" value="<?php echo isset($_SESSION['Auth']['User']['id']) ? $_SESSION['Auth']['User']['id'] : '' ?>">
         <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
         <input type="hidden" name="schedule" value="<?php echo isset($schedule) ? $schedule : '' ?>">
         <dl>
@@ -62,24 +62,7 @@ $schedule = $_GET['schedule'];
         </dl>
         <hr>
         <div class="row">
-            <div class="col-md-6">
-                <fieldset>
-                    <legend class="text-muted">Owner Information</legend>
-                    <div class="form-group">
-                        <label for="owner_name" class="control-label">Name</label>
-                        <input type="text" name="owner_name" id="owner_name" class="form-control form-control-border" placeholder="Owner Name" value ="<?php echo isset($owner_name) ? $owner_name : '' ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="control-label">Email Address</label>
-                        <input type="email" name="email" id="email" class="form-control form-control-border" placeholder="Email Address" value ="<?php echo isset($email) ? $email : '' ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="address" class="control-label">Address</label>
-                        <textarea type="address" name="address" id="address" class="form-control form-control-sm rounded-0" rows="3" placeholder="Address" required><?php echo isset($address) ? $address : '' ?></textarea>
-                    </div>
-                </fieldset>
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-10">
                 <fieldset>
                     <legend class="text-muted">Pet Information</legend>
                     <div class="form-group">
@@ -95,7 +78,7 @@ $schedule = $_GET['schedule'];
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="breed" class="control-label">Breed</label>
+                        <label for="breed" class="control-label">Breed <small class="text-info"><i>If you don't know the breed, leave this field blank.</i></small></label>
                         <input type="text" name="breed" id="breed" class="form-control form-control-border" placeholder="Breed Type" value ="<?php echo isset($breed) ? $breed : '' ?>">
                     </div>
                     <div class="form-group">
@@ -113,6 +96,19 @@ $schedule = $_GET['schedule'];
                         }
                         ?>
                     <select name="service_id[]" id="service_id" class="form-control form-control-border select2" multiple required>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="doctors" class="control-label">Doctor List</label>
+                  
+                    <select name="doctor_id" id="doctor_id" class="form-control form-control-border" required>
+                        <option value="" selected disabled>Please select doctor</option>
+                        <?php 
+                        $doctor_list = $conn->query("SELECT * FROM users WHERE TYPE='2' ORDER BY fullname ASC");
+                        while($row = $doctor_list->fetch_assoc()):
+                        ?>
+                        <option value="<?= $row['id'] ?>"><?= ucwords($row['fullname']) ?></option>
+                        <?php endwhile; ?>
                     </select>
                 </div>
               
@@ -136,13 +132,11 @@ $schedule = $_GET['schedule'];
                                 $ts_disabled = true;
                             }
                             ?>
-                       
                                 <div class ="col-md-4">
                                 <div class="form-group">
                                     <div class="hover timeslot form-control <?= ($ts_disabled)?'':'timeslot_disabled' ?>  " name="slot_time[]"><?= $value["slot_start_time"] ?>-<?= $value["slot_end_time"] ?></div>
                                 </div>
                                 </div>
-                           
                         <?php
                         }
                     ?>
@@ -190,22 +184,16 @@ $schedule = $_GET['schedule'];
         $('#uni_modal #appointment-form').submit(function(e){
             e.preventDefault();
             if($('#timeslot_id').val() == ''){
-                    // console.log('please select timeslot');
-                    alert('Please select timeslot');
-                    // console.log('false');
+                    alert_toast("Please select timeslot",'error');
                     return false;
                 }
             if ($('#uni_modal #appointment-form').valid()) {
-                // alert('asdfghj');
                 var _this = $(this)
-                    // $('.error').text(style="color:red")
                     $('.pop-msg').remove()
                     var el = $('<div>')
                         el.addClass("pop-msg alert")
                         el.hide()
                     start_loader();
-                    // debugger;
-                
                 $.ajax({
                         url:_base_url_+"classes/Master.php?f=save_appointment",
                         data: new FormData($(this)[0]),

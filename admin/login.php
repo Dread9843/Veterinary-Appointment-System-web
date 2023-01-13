@@ -51,7 +51,7 @@ require_once 'dashboard/sess_auth.php';
           <div id="msg"></div>
             <form id="login-frm" action="" method="post">
               <div class="input-group mb-3">
-                <input type="email" class="form-control" autofocus name="email" placeholder="Email Address" required>
+                <input type="email" class="form-control" autofocus name="email" placeholder="Gmail Address" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-user"></span>

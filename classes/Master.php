@@ -269,55 +269,58 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`='{$v}' ";
 			}
 		}
-		
+
 		$slot_taken = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and `status` in (0,1)")->num_rows;
 		if($slot_taken >= $this->settings->info('max_appointment')){
 			$resp['status'] = 'failed';
 			$resp['msg'] = "Sorry, The Appointment Schedule is already full.";
 		}else{
 			$time_slots = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and time(timeslot) = '{$timeslot}' and `status` in (0,1)")->num_rows;
+			$doctor_count = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and doctor_id = '{$doctor_id}' and `status` in (0,1)")->num_rows;
+
 			if($time_slots >= $this->settings->info('max_patient'))
 			{
 				$resp['status'] = 'failed';
 				$resp['msg'] = "Sorry, The selected Time Slot is already full.";
 			}
+			elseif($doctor_count >= '5'){
+				$resp['status'] = 'failed';
+				$resp['msg'] = "Sorry, The selected doctor is already full.";
+			}
 			else
 			{
 				if(empty($id)){
 					$sql = "INSERT INTO `appointment_list` set {$data} ";
-					
 					if($sql)
 					{
-						$bcc_users =$this->conn->query("SELECT email FROM users WHERE TYPE != '3'");
+						$select_user_email = $this->conn->query("SELECT email FROM users WHERE id = '{$cus_id}'");
+						while($row = $select_user_email->fetch_assoc()){
+							$email = $row['email'];
+						}
+
+						$bcc_users = $this->conn->query("SELECT email FROM users WHERE TYPE = '1' OR id = '{$doctor_id}'");
 						$bcc_users -> fetch_all(MYSQLI_ASSOC);
-		
 						foreach ($bcc_users as $bcc_user) {
 							$bcc[] = $bcc_user['email'];
 						}
 						$bcc_recipients = $bcc;
-		
+						
 						$mail = new PHPMailer(true);
-		
 						$mail->isSMTP();
 						$mail->Host = 'smtp.gmail.com';
 						$mail->SMTPAuth = true;
 						$mail->Username = 'sahilfyp2022@gmail.com';
 						$mail->Password = 'ltuboawmayvwsopy';
-		
 						$mail->SMTPSecure = 'ssl';
 						$mail->Port = 465;
-						
 						$mail->setFrom('sahilfyp2022@gmail.com',"VetCare");
-						
-						$toEmail = $_POST['email'];
+						$toEmail = $email;
 						$mail->addAddress($toEmail);
 						foreach ($bcc_recipients as $bcc_recipient) {
 							$bcc_comp = $bcc_recipient;
 							$mail->addBCC($bcc_comp);
 						}
-						
 						$mail->isHTML(true);
-						
 						$mail->Subject = "Appointment Request";
 						$mail->Body = "Dear Sir/Ma'am,<br> 
 						<p>The request for doctor appointment has been received by our Appointment Section. The management will reach you as soon as they sees your request.</p><br><h4> Your appointment code is '{$_POST['code']}'.<h4><br>
@@ -325,9 +328,7 @@ Class Master extends DBConnection {
 						Appointment Section</p>
 						<p>VetCare<br>
 						Phone: 9840167003</p>";
-		
 						$mail->send();
-						
 						if($mail)
 						{
 							$resp['status'] = 'success';
@@ -353,19 +354,16 @@ Class Master extends DBConnection {
 					$resp['code'] = $code;
 					$resp['status'] = 'success';
 					if(empty($id))
-						$resp['msg'] = "New Appointment Details has successfully added.</p>.";
+						$resp['msg'] = "<p>New Appointment Details has successfully added.</p>.";
 					else
 						$resp['msg'] = "Appointment Details has been updated successfully.";
-					
 				}else{
 					$resp['status'] = 'failed';
 					$resp['msg'] = "An error occured.";
 					$resp['err'] = $this->conn->error."[{$sql}]";
 				}
-			}
-			
+			}	
 		}
-
 		if($resp['status'] =='success')
 		$this->settings->set_flashdata('success',$resp['msg']);
 		return json_encode($resp);
@@ -388,7 +386,7 @@ Class Master extends DBConnection {
 	//appointment status update
 	function update_appointment_status(){
 		extract($_POST);
-		
+
 		$del = $this->conn->query("UPDATE `appointment_list` set `status` = '{$status}' where id = '{$id}'");
 
 		if($del){
@@ -401,19 +399,20 @@ Class Master extends DBConnection {
 				$a_status = "Cancelled";
 			}
 			
-			$select_email = $this->conn->query("SELECT * FROM appointment_list WHERE id = '{$id}'");
-			
+			$select_email = $this->conn->query("SELECT  a.*,u.`email` from `appointment_list` a JOIN users u ON a.`cus_id` = u.`id` WHERE a.id = '{$id}'");
+
 			while($row = $select_email->fetch_assoc())
 			{
 				$cus_email = $row['email'];
 				$code = $row['code'];
 				$schedule = $row['schedule'];
 				$timeslot = $row['timeslot'];
+				$doctor_id = $row['doctor_id'];
 			}
 
-			$bcc_users =$this->conn->query("SELECT email FROM users WHERE TYPE != '3'");
-			$bcc_users -> fetch_all(MYSQLI_ASSOC);
+			$bcc_users =  $this->conn->query("SELECT email FROM users WHERE TYPE = '1' OR id = '{$doctor_id}'");
 
+			$bcc_users -> fetch_all(MYSQLI_ASSOC);
 			foreach ($bcc_users as $bcc_user) {
 				$bcc[] = $bcc_user['email'];
 			}
@@ -463,14 +462,12 @@ Class Master extends DBConnection {
 			if($mail)
 			{
 				$resp['status'] = 'success';
-		
 			}
 			else
 			{
 				$resp['status'] = 'failed';
 				$resp['msg'] = "Failed to send mail.";
 			}
-
 
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Appointment Request status has successfully updated.");

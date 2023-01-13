@@ -1,13 +1,18 @@
 <?php 
 if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT a.*,c.name as pet_type from `appointment_list` a inner join category_list c on a.category_id = c.id where a.id = '{$_GET['id']}'");
+    $qry = $conn->query("SELECT a.*,c.name AS pet_type, u.`fullname`,u.`address`,u.`email`,u.`phone` FROM `appointment_list` a 
+    INNER JOIN category_list c ON a.category_id = c.id 
+    JOIN users u ON a.`cus_id`=u.`id`
+    where a.id = '{$_GET['id']}'");
     if($qry->num_rows > 0){
         $res = $qry->fetch_array();
+        
         foreach($res as $k => $v){
             if(!is_numeric($k)){
                 $$k = $v;
             }
         }
+        
     }else{
     echo "<script>alert('Unknown Appointment Request ID'); location.replace('./?page=appointments');</script>";
     }
@@ -77,18 +82,19 @@ if(isset($service_ids)){
                                             <tbody>
                                                 <tr class="border-info">
                                                     <th class="py-1 px-2 text-light bg-gradient-info">Name</th>
-                                                    <td class="py-1 px-2 text-right"><?= ucwords($owner_name) ?></td>
+                                                    <td class="py-1 px-2 text-right"><?= ucwords($fullname) ?></td>
                                                 </tr>
-                                                <!-- <tr class="border-info">
-                                                    <th class="py-1 px-2 text-light bg-gradient-info">Contact #</th>
-                                                    <td class="py-1 px-2 text-right"><?= ($contact) ?></td>
-                                                </tr> -->
                                                 <tr class="border-info">
                                                     <th class="py-1 px-2 text-light bg-gradient-info">Email</th>
                                                     <td class="py-1 px-2 text-right"><?= ($email) ?></td>
-                                                </tr><tr class="border-info">
+                                                </tr>
+                                                <tr class="border-info">
                                                     <th class="py-1 px-2 text-light bg-gradient-info">Address</th>
                                                     <td class="py-1 px-2 text-right"><?= ($address) ?></td>
+                                                </tr>
+                                                <tr class="border-info">
+                                                    <th class="py-1 px-2 text-light bg-gradient-info">Phone</th>
+                                                    <td class="py-1 px-2 text-right"><?= ($phone) ?></td>
                                                 </tr>
                                             </tbody>
                                         </table>

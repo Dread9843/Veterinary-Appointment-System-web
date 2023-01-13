@@ -68,7 +68,7 @@ require_once 'dashboard/sess_auth.php';
 			<fieldset>
 				<legend>Other Information</legend>
 				<div class="form-group">
-					<label for="email" class="control-label">Email</label>
+					<label for="email" class="control-label">Gmail Address</label>
 					<input type="email" class="form-control form-control-sm" name="email" id="email" value="<?php echo $_settings->info('email') ?>">
 				</div>
 				<div class="form-group">

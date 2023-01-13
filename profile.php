@@ -14,18 +14,6 @@ if(isset($id)){
         }
     }
 }
-// if(isset($id)){
-//     $result = $conn->query("SELECT * FROM appointment_list JOIN users ON (appointment_list.cus_id = users.id) where cus_id = $id");
-//     // print_r($result);
-//     if($result->num_rows > 0){
-//         $list = $result->fetch_array();
-//         // foreach($list as $k => $v){
-//         //     if(!is_numeric($k))
-//         //     $$k = $v;
-//         // }
-//     }
-
-// }
 ?>
 <div class="col-12">
     <div class="row my-5 d-flex align-items-center justify-content-center">
@@ -40,7 +28,7 @@ if(isset($id)){
                         <dd class='pl-4 fs-4 fw-bold'><?= isset($fullname) ? $fullname : '' ?></dd>
                         <dt class="text-muted">Phone</dt>
                         <dd class='pl-4 fs-4 fw-bold'><?= isset($phone) ? $phone : '' ?></dd>
-                        <dt class="text-muted">Email Address</dt>
+                        <dt class="text-muted">Gmail Address</dt>
                         <dd class='pl-4 fs-4 fw-bold'><?= isset($email) ? $email : '' ?></dd>
                         <dt class="text-muted">Address</dt>
                         <dd class='pl-4 fs-4 fw-bold'><?= isset($address) ? $address : '' ?></dd>
@@ -57,8 +45,7 @@ if(isset($id)){
                 </div>
                 <?php
                 if(!empty($id)){
-                $result = $conn->query("SELECT * FROM appointment_list WHERE cus_id = $id");
-                // print_r($result->num_rows);
+                $result = $conn->query("SELECT * FROM appointment_list a JOIN users u ON a.cus_id = u.id WHERE a.cus_id = $id");
 
                 if(!empty($result->num_rows))
                 {
@@ -66,7 +53,7 @@ if(isset($id)){
                         <div class="card-body rounded-0">
                             <dl>
                                 <dt class="text-muted">Owner Name</dt>
-                                <dd class='pl-4 fs-4 fw-bold'><?= isset($v['owner_name']) ? $v['owner_name'] : '' ?></dd>
+                                <dd class='pl-4 fs-4 fw-bold'><?= isset($v['fullname']) ? $v['fullname'] : '' ?></dd>
                                 <dt class="text-muted">Appointment Code</dt>
                                 <dd class='pl-4 fs-4 fw-bold'><?= isset($v['code']) ? $v['code'] : '' ?></dd>
                                 <dt class="text-muted">Appointment Day</dt>

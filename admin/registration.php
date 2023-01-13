@@ -49,8 +49,8 @@
                 <small class="text-info"><i>Phone number must be of 10 digits.</i></small>
             </div>
             <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required autofocus>
+                <label>Gmail Address</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Gmail Address" required autofocus>
             </div>
             <div class="form-group">
                 <label>Password</label>
@@ -87,7 +87,7 @@ $(function(){
 				}
         else
         {
-					$('#msg').html('<div class="alert alert-danger">Email already exits. Try new one</div>');
+					$('#msg').html('<div class="alert alert-danger">Email already exist. Try new one</div>');
 					$("html, body").animate({ scrollTop: 0 }, "fast");
 				}
         end_loader();

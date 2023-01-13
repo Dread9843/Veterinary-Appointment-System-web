@@ -52,6 +52,9 @@
       <a href="./?page=about" class="nav-link <?= isset($page) && $page =='about' ? "active" : "" ?>">About Us</a>
       </li>
       <li class="nav-item">
+      <a href="./?page=doctor_list" class="nav-link <?= isset($page) && $page =='doctor_list' ? "active" : "" ?>">Doctors</a>
+      </li>
+      <li class="nav-item">
       <a href="./?page=contact_us" class="nav-link <?= isset($page) && $page =='contact_us' ? "active" : "" ?>">Contact Us</a>
       </li>
       <?php if(isset($_SESSION['Auth']['User']['type']) && $_SESSION['Auth']['User']['type'] == '3'): ?>

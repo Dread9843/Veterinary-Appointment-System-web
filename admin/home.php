@@ -121,6 +121,11 @@ while($row = $appointments->fetch_assoc()){
                     daysOfWeek: [0,1,2,3,4,5], // these recurrent events move separately
                     title:0,
                     allDay: true,
+                },
+                {
+                    daysOfWeek: [6], // these recurrent events move separately
+                    title:'Closed',
+                    color: 'red',
                 }
             ],
             validRange:{
@@ -128,13 +133,14 @@ while($row = $appointments->fetch_assoc()){
             },
             eventDidMount:function(info){
                 // console.log(appointment)
+                // $(info.el).css('cursor','not-allowed');
                 if(!!appointment[info.event.startStr]){
                     var available = parseInt(info.event.title) + parseInt(appointment[info.event.startStr]);
                      $(info.el).find('.fc-event-title.fc-sticky').text(available)
                 }
                 end_loader()
             },
-            editable  : true
+            editable  : false
         });
 
     calendar.render();

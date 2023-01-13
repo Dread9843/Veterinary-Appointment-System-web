@@ -30,14 +30,17 @@ require_once 'dashboard/sess_auth.php';
 				<tbody>
 					<?php 
 						$i = 1;
-						$qry = $conn->query("SELECT * from `appointment_list` order by unix_timestamp(`date_created`) desc ");
+						$qry = $conn->query("SELECT  a.*,u.`fullname` from `appointment_list` a JOIN users u ON a.`cus_id` = u.`id` order by unix_timestamp(`date_created`) desc ");
 						while($row = $qry->fetch_assoc()):
+							// echo '<pre>';
+							// print_r($row);
+							// exit;
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td class=""><?php echo date("Y-m-d H:i",strtotime($row['date_created'])) ?></td>
 							<td><?php echo ($row['code']) ?></td>
-							<td class=""><p class="truncate-1"><?php echo ucwords($row['owner_name']) ?></p></td>
+							<td class=""><p class="truncate-1"><?php echo ucwords($row['fullname']) ?></p></td>
 							<td class="text-center">
 								<?php 
 									switch ($row['status']){

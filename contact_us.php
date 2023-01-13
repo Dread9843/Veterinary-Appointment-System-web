@@ -14,7 +14,7 @@
                         <dt class="text-muted"><i class="fa fa-map-marked-alt"></i> Location</dt>
                         <dd class="pl-4"><?= $_settings->info('address') ?></dd>
                         <dt class="text-muted"><i class="fa fa-clock"></i> Daily Schedule</dt>
-                        <dd class="pl-4"><?= $_settings->info('clinic_schedule') ?></dd>
+                        <dd class="pl-4"><?= $_settings->info('clinic_schedule') ?><br><small><i>(Closed on Saturday)</i></small></dd>
                         <dt class="text-muted"><i class="fa fa-paw"></i> Maximum Daily Appointments</dt>
                         <dd class="pl-4"><?= $_settings->info('max_appointment') ?></dd>
                     </dl>
@@ -53,8 +53,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-10">
-                                <small>Email</small>
-                                <input type="email" class="form-control form-control-sm form-control-border" id="email" name="email" required placeholder="Email">
+                                <small>Gmail Address</small>
+                                <input type="email" class="form-control form-control-sm form-control-border" id="email" name="email" required placeholder="Gmail Address">
                             </div>
                         </div>
                         <div class="row">

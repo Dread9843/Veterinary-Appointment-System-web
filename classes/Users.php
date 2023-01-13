@@ -16,6 +16,7 @@ Class Users extends DBConnection {
 		extract($_POST);
 		$oid = $id;
 		$data = '';
+		$doc_data = '';
 		$chk = $this->conn->query("SELECT * FROM `users` where email ='{$email}' ".($id>0? " and id!= '{$id}' " : ""))->num_rows;
 		if($chk > 0){
 			return 3;
@@ -27,6 +28,14 @@ Class Users extends DBConnection {
 				$data .= " {$k} = '{$v}' ";
 			}
 		}
+
+		foreach($_POST as $k => $v){
+			if(in_array($k,array('profession','speciality'))){
+				if(!empty($doc_data)) $doc_data .=" , ";
+				$doc_data .= " {$k} = '{$v}' ";
+			}
+		}
+
 		if(!empty($password)){
 			$password = password_hash($password, PASSWORD_DEFAULT);;
 			if(!empty($data)) $data .=" , ";
@@ -34,11 +43,18 @@ Class Users extends DBConnection {
 		}
 		if(!empty($data)) $data .=" , ";
 		$data .= "user_status = 'verified'";
-		
+
 		if(empty($id)){
 			$qry = $this->conn->query("INSERT INTO users set {$data}");
 			if($qry){
 				$id = $this->conn->insert_id;
+				if($type == '2')
+				{
+					if(!empty($doc_data)) $doc_data .=" , ";
+					$doc_data .= "doc_id = $id";
+					$insert_doctor_info = $this->conn->query("INSERT INTO doctor_details set {$doc_data}");
+				}
+				
 				$this->settings->set_flashdata('success','User Details successfully saved.');
 				$resp['status'] = 1;
 			}else{
@@ -72,13 +88,11 @@ Class Users extends DBConnection {
 	//delete users
 	public function delete_users(){
 		extract($_POST);
-		$avatar = $this->conn->query("SELECT avatar FROM users where id = '{$id}'")->fetch_array()['avatar'];
 		$qry = $this->conn->query("DELETE FROM users where id = $id");
 		if($qry){
-			$avatar = explode("?",$avatar)[0];
+
 			$this->settings->set_flashdata('success','User Details successfully deleted.');
-			if(is_file(base_app.$avatar))
-				unlink(base_app.$avatar);
+
 			$resp['status'] = 'success';
 		}else{
 			$resp['status'] = 'failed';

@@ -30,7 +30,7 @@ foreach($user->fetch_array() as $k =>$v){
 					<small class="text-info"><i>Phone number must be of 10 digits.</i></small>
 				</div>
 				<div class="form-group">
-					<label for="email">Email Address</label>
+					<label for="email">Gmail Address</label>
 					<input type="email" name="email" id="email" class="form-control" value="<?php echo isset($meta['email']) ? $meta['email']: '' ?>" required  autocomplete="off">
 				</div>
 				<div class="form-group">

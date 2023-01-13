@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-md-4 offset-md-4 form card border border-success">
             <div class="card-header rounded-0">
-                <h5 class="text-center"><b>We've sent a verification code to your email.<br><small>Please enter OTP to verify</small> </b></h5>
+                <h5 class="text-center"><b>We've sent a verification code to your Gmail.<br><small>Please enter OTP to verify</small> </b></h5>
             </div>   
             <div class="card-body rounded-0">
             <div id="msg"></div>

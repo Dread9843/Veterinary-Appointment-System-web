@@ -31,51 +31,37 @@ Class Customer extends DBConnection {
 		$postdata['address'] = $_POST['address'];
 		$postdata['phone'] = $_POST['phone'];
 		$postdata['email'] = $_POST['email'];
-		
 		$password = $_POST['password'];
 		$postdata['password'] = password_hash($password, PASSWORD_DEFAULT);
 		$postdata['type'] = '3';
 		$postdata['user_status'] = 'unverified';
 		//generate otp
 		$otp = rand(999999, 111111);
-
 		$count_email =  $this->conn->query("SELECT * from users where email = '{$_POST['email']}'".($id>0? " and id!= '{$id}' " : ""))->num_rows;
-	
 		if ($count_email > 0) {
 			return 3;
 			exit;
-		
 		}
 		if(empty($id))
 		{
 			$qry = $this->conn->query("INSERT INTO users (fullname,address,phone,email,password,type,user_status,otp) values ('{$postdata['fullname']}','{$postdata['address']}','{$postdata['phone']}','{$postdata['email']}','{$postdata['password']}','{$postdata['type']}','{$postdata['user_status']}','$otp')");
-
 			if($qry)
 			{
 				$mail = new PHPMailer(true);
-
 				$mail->isSMTP();
 				$mail->Host = 'smtp.gmail.com';
 				$mail->SMTPAuth = true;
 				$mail->Username = 'sahilfyp2022@gmail.com';
 				$mail->Password = 'ltuboawmayvwsopy';
-
 				$mail->SMTPSecure = 'ssl';
 				$mail->Port = 465;
-				
 				$mail->setFrom('sahilfyp2022@gmail.com');
-				
 				$toEmail = $_POST['email'];
-				
 				$mail->addAddress($toEmail);
-				
 				$mail->isHTML(true);
-				
 				$mail->Subject = "One Time Password";
 				$mail->Body = "Your OTP verification code is $otp";
-				
 				$mail->send();
-				
 				if($mail)
 				{
 					return 1;
@@ -86,7 +72,6 @@ Class Customer extends DBConnection {
 					$resp['status'] = 'failed';
 					$resp['msg'] = "Failed to send mail.";
 				}
-				
 			}
 			else
 			{
