@@ -21,7 +21,7 @@ $qry = $conn->query("SELECT * FROM `users` u JOIN doctor_details d ON u.`id`=d.`
                                 <dd class='pl-4 fs-4 fw-bold'><?= $v['fullname'] ?></dd>
                                 <dt class="text-muted">Address</dt>
                                 <dd class='pl-4 fs-4 fw-bold'><?= $v['address'] ?></dd>
-                                <dt class="text-muted">Post</dt>
+                                <dt class="text-muted">Profession</dt>
                                 <dd class='pl-4 fs-4 fw-bold'><?= $v['profession'] ?></dd>
                                 <dt class="text-muted">Speciality</dt>
                                 <dd class='pl-4 fs-4 fw-bold'><?= $v['speciality'] ?></dd>

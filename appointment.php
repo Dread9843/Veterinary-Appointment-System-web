@@ -74,7 +74,7 @@ while($row = $appointments->fetch_assoc()){
                 },
             validRange:{
                 start: moment(date).format("YYYY-MM-DD"),
-                end: moment(date).utc().startOf('day').add(7, 'day').format("YYYY-MM-DD HH:mm:ss"),
+                end: moment(date).utc().startOf('day').add(6, 'day').format("YYYY-MM-DD HH:mm:ss"),
             },
             eventDidMount:function(info){
                 // console.log(appointment)
