@@ -270,99 +270,107 @@ Class Master extends DBConnection {
 			}
 		}
 
-		$slot_taken = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and `status` in (0,1)")->num_rows;
-		if($slot_taken >= $this->settings->info('max_appointment')){
+		$count_user_booking = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and `status` in (0,1) and cus_id = $cus_id")->num_rows;
+		if($count_user_booking >= 1){
 			$resp['status'] = 'failed';
-			$resp['msg'] = "Sorry, The Appointment Schedule is already full.";
-		}else{
-			$time_slots = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and time(timeslot) = '{$timeslot}' and `status` in (0,1)")->num_rows;
-			$doctor_count = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and doctor_id = '{$doctor_id}' and `status` in (0,1)")->num_rows;
-
-			if($time_slots >= $this->settings->info('max_patient'))
-			{
+			$resp['msg'] = "Sorry, Your today's booking is already full.";
+		}
+		else
+		{
+			$slot_taken = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and `status` in (0,1)")->num_rows;
+			if($slot_taken >= $this->settings->info('max_appointment')){
 				$resp['status'] = 'failed';
-				$resp['msg'] = "Sorry, The selected Time Slot is already full.";
-			}
-			elseif($doctor_count >= '5'){
-				$resp['status'] = 'failed';
-				$resp['msg'] = "Sorry, The selected doctor is already full.";
-			}
-			else
-			{
-				if(empty($id)){
-					$sql = "INSERT INTO `appointment_list` set {$data} ";
-					if($sql)
-					{
-						$select_user_email = $this->conn->query("SELECT email FROM users WHERE id = '{$cus_id}'");
-						while($row = $select_user_email->fetch_assoc()){
-							$email = $row['email'];
-						}
+				$resp['msg'] = "Sorry, The Appointment Schedule is already full.";
+			}else{
+				$time_slots = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and time(timeslot) = '{$timeslot}' and `status` in (0,1)")->num_rows;
+				$doctor_count = $this->conn->query("SELECT * FROM `appointment_list` where date(schedule) = '{$schedule}' and doctor_id = '{$doctor_id}' and `status` in (0,1)")->num_rows;
 
-						$bcc_users = $this->conn->query("SELECT email FROM users WHERE TYPE = '1' OR id = '{$doctor_id}'");
-						$bcc_users -> fetch_all(MYSQLI_ASSOC);
-						foreach ($bcc_users as $bcc_user) {
-							$bcc[] = $bcc_user['email'];
-						}
-						$bcc_recipients = $bcc;
-						
-						$mail = new PHPMailer(true);
-						$mail->isSMTP();
-						$mail->Host = 'smtp.gmail.com';
-						$mail->SMTPAuth = true;
-						$mail->Username = 'sahilfyp2022@gmail.com';
-						$mail->Password = 'ltuboawmayvwsopy';
-						$mail->SMTPSecure = 'ssl';
-						$mail->Port = 465;
-						$mail->setFrom('sahilfyp2022@gmail.com',"VetCare");
-						$toEmail = $email;
-						$mail->addAddress($toEmail);
-						foreach ($bcc_recipients as $bcc_recipient) {
-							$bcc_comp = $bcc_recipient;
-							$mail->addBCC($bcc_comp);
-						}
-						$mail->isHTML(true);
-						$mail->Subject = "Appointment Request";
-						$mail->Body = "Dear Sir/Ma'am,<br> 
-						<p>The request for doctor appointment has been received by our Appointment Section. The management will reach you as soon as they sees your request.</p><br><h4> Your appointment code is '{$_POST['code']}'.<h4><br>
-						<p>Regards,<br>
-						Appointment Section</p>
-						<p>VetCare<br>
-						Phone: 9840167003</p>";
-						$mail->send();
-						if($mail)
+				if($time_slots >= $this->settings->info('max_patient'))
+				{
+					$resp['status'] = 'failed';
+					$resp['msg'] = "Sorry, The selected Time Slot is already full.";
+				}
+				elseif($doctor_count >= '5'){
+					$resp['status'] = 'failed';
+					$resp['msg'] = "Sorry, The selected doctor is already full.";
+				}
+				else
+				{
+					if(empty($id)){
+						$sql = "INSERT INTO `appointment_list` set {$data} ";
+						if($sql)
 						{
-							$resp['status'] = 'success';
+							$select_user_email = $this->conn->query("SELECT email FROM users WHERE id = '{$cus_id}'");
+							while($row = $select_user_email->fetch_assoc()){
+								$email = $row['email'];
+							}
+
+							$bcc_users = $this->conn->query("SELECT email FROM users WHERE TYPE = '1' OR id = '{$doctor_id}'");
+							$bcc_users -> fetch_all(MYSQLI_ASSOC);
+							foreach ($bcc_users as $bcc_user) {
+								$bcc[] = $bcc_user['email'];
+							}
+							$bcc_recipients = $bcc;
+							
+							$mail = new PHPMailer(true);
+							$mail->isSMTP();
+							$mail->Host = 'smtp.gmail.com';
+							$mail->SMTPAuth = true;
+							$mail->Username = 'sahilfyp2022@gmail.com';
+							$mail->Password = 'ltuboawmayvwsopy';
+							$mail->SMTPSecure = 'ssl';
+							$mail->Port = 465;
+							$mail->setFrom('sahilfyp2022@gmail.com',"VetCare");
+							$toEmail = $email;
+							$mail->addAddress($toEmail);
+							foreach ($bcc_recipients as $bcc_recipient) {
+								$bcc_comp = $bcc_recipient;
+								$mail->addBCC($bcc_comp);
+							}
+							$mail->isHTML(true);
+							$mail->Subject = "Appointment Request";
+							$mail->Body = "Dear Sir/Ma'am,<br> 
+							<p>The request for doctor appointment has been received by our Appointment Section. The management will reach you as soon as they sees your request.</p><br><h4> Your appointment code is '{$_POST['code']}'.<h4><br>
+							<p>Regards,<br>
+							Appointment Section</p>
+							<p>VetCare<br>
+							Phone: 9840167003</p>";
+							$mail->send();
+							if($mail)
+							{
+								$resp['status'] = 'success';
+							}
+							else
+							{
+								$resp['status'] = 'failed';
+								$resp['msg'] = "Failed to send mail.";
+							}
 						}
 						else
 						{
 							$resp['status'] = 'failed';
-							$resp['msg'] = "Failed to send mail.";
+							$resp['msg'] = "Error Occured";
 						}
+					}else{
+						$sql = "UPDATE `appointment_list` set {$data} where id = '{$id}' ";
 					}
-					else
-					{
+					$save = $this->conn->query($sql);
+					if($save){
+						$rid = !empty($id) ? $id : $this->conn->insert_id;
+						$resp['id'] = $rid;
+						$resp['code'] = $code;
+						$resp['status'] = 'success';
+						if(empty($id))
+							$resp['msg'] = "<p>New Appointment Details has successfully added.</p>.";
+						else
+							$resp['msg'] = "Appointment Details has been updated successfully.";
+					}else{
 						$resp['status'] = 'failed';
-						$resp['msg'] = "Error Occured";
+						$resp['msg'] = "An error occured.";
+						$resp['err'] = $this->conn->error."[{$sql}]";
 					}
-				}else{
-					$sql = "UPDATE `appointment_list` set {$data} where id = '{$id}' ";
-				}
-				$save = $this->conn->query($sql);
-				if($save){
-					$rid = !empty($id) ? $id : $this->conn->insert_id;
-					$resp['id'] = $rid;
-					$resp['code'] = $code;
-					$resp['status'] = 'success';
-					if(empty($id))
-						$resp['msg'] = "<p>New Appointment Details has successfully added.</p>.";
-					else
-						$resp['msg'] = "Appointment Details has been updated successfully.";
-				}else{
-					$resp['status'] = 'failed';
-					$resp['msg'] = "An error occured.";
-					$resp['err'] = $this->conn->error."[{$sql}]";
-				}
-			}	
+				}	
+			}
 		}
 		if($resp['status'] =='success')
 		$this->settings->set_flashdata('success',$resp['msg']);
